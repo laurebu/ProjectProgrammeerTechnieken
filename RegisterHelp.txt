@@ -1,0 +1,13 @@
+SCGCx	:	System Clock Gating Control Register x
+	-> enable clock of certain Port
+PCR	:	Purpose Control Register
+	-> pin configureren als GPIO (0x100)
+
+PDDR	:	Port Data Direction Register 
+	-> Set pin as output or input
+
+PDOR	:	Port Data Output Register
+	-> manuipulate the output of a pin (LED are active low!!!)
+
+PDIR	:	Port Data Input Register
+	-> read the input of a pin
