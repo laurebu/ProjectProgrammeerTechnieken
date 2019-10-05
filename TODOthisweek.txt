@@ -1,0 +1,8 @@
+TODO this week:
+
+1) planning + 3tier schema indienen voor het volgende LABO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	(laure: planning in orde???)
+	
+2) prototypes buttondriver (.h file) ==> laure
+
+3) joystickdriver
