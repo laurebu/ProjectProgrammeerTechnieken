@@ -1,6 +1,6 @@
 /*
- * ledDriver.h
- * author: Lander Buysse
+ * @author: Lander Buysse
+ * @file: ledDriver.h
  */
 
 //files to include
@@ -10,7 +10,7 @@
 #define BLUE_FRDM	21		//blue led on the frdm-k64f
 #define RED_FRDM    22		//red led on the frdm-k64f
 #define GREEN_FRDM  26		//green led on the frdm-k64f
-#define BLUE_AP		13		//blue led on the application shield
+#define BLUE_AP		12		//blue led on the application shield
 #define RED_AP      2		//red led on the application shield
 #define GREEN_AP	4		//green led on the application shield
 
@@ -24,7 +24,6 @@
 /*
  *  prototypes
  */
-void delay(long delay);
 void turnOnLed(int nr);
 void turnOffLed(int nr);
 void initialiseLed(int nr);

@@ -1,18 +1,11 @@
 /*
- * ledDriver.c
- * author: Lander Buysse
+ * @author: Lander Buysse
+ * @file: ledDriver.c
  */
-//includes
-#include <ledDriver.h>
-#include "MK64F12.h"
 
-/*
- * wait for some time
- */
-void delay(long delay) {
-	for (long i = 0; i < delay; i++) {
-	}
-}
+//files tp include
+#include "ledDriver.h"
+#include "MK64F12.h"
 
 /*
  * turn on led

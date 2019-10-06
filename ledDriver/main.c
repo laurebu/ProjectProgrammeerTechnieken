@@ -1,11 +1,11 @@
-//includes
+//files to include
 #include <stdio.h>
-#include "ledDriver.h"
+#include "ledControl.h"
 #include "MK64F12.h"
+#include "joystickDriver.h"
 
 /*
  * temporary main to test some stuff in
- * be aware, still need to make middleware, don't use these functions directly unless for testing
  */
 int main(void) {
 	//remark: red one stays on from the start
@@ -13,13 +13,25 @@ int main(void) {
 
 	//testing code
 	printf("hello");
+	initialise(GREEN_FRDM);
+	initialise(BLUE_FRDM);
+	initialise(RED_FRDM);
 	while (1) {
 
-		initialiseLed(BLUE_AP);
-		turnOnLed(BLUE_AP);
-		delay(10000000);
-		turnOffLed(BLUE_AP);
-		delay(10000000);
+		turnOn(GREEN_FRDM);
+		delay(1000000);
+		turnOff(GREEN_FRDM);
+		delay(1000000);
+
+		turnOn(RED_FRDM);
+		delay(1000000);
+		turnOff(RED_FRDM);
+		delay(1000000);
+
+		turnOn(BLUE_FRDM);
+		delay(1000000);
+		turnOff(BLUE_FRDM);
+		delay(1000000);
 
 	}
 	return 0;
