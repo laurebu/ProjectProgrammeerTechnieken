@@ -1,0 +1,15 @@
+inputControl.c:29:6:initEnums	4	static
+inputControl.c:39:5:getHour	4	static
+inputControl.c:46:5:getMin	4	static
+inputControl.c:53:5:getSec	4	static
+inputControl.c:60:5:getHourAlarm	4	static
+inputControl.c:67:5:getMinAlarm	4	static
+inputControl.c:74:5:getSecAlarm	4	static
+inputControl.c:81:8:getSetting	24	static
+inputControl.c:107:8:getTune	24	static
+inputControl.c:133:6:incrementTime	16	static
+inputControl.c:166:6:decrementTime	16	static
+inputControl.c:198:6:incrementAlarm	16	static
+inputControl.c:230:6:decrementAlarm	16	static
+inputControl.c:262:6:PORTC_IRQHandler	8	static
+inputControl.c:346:6:PORTB_IRQHandler	8	static

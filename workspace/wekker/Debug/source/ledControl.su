@@ -1,0 +1,4 @@
+ledControl.c:13:6:delay	24	static
+ledControl.c:23:6:turnOn	16	static
+ledControl.c:32:6:turnOff	16	static
+ledControl.c:41:6:initialise	16	static

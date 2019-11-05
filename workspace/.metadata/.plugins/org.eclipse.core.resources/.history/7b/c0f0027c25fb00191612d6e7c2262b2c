@@ -1,0 +1,71 @@
+/*
+ * @author: Lander Buysse
+ * @file: speakerDriver.c
+ */
+
+//files to include
+#include <stdio.h>
+#include "MK64F12.h"
+#include "speakerDriver.h"
+
+
+int noteValue;
+
+/*
+ * temporary main to test stuff, remove this from the driver !!!!!!!
+ */
+int main(void){
+	initPWM();
+
+	playNote(A4);
+
+	return 0;
+}
+
+void playNote(int note_value){
+
+		FTM0->SC = 0x004F; 				//setting time overflow enable interrupt=1, CLKS = 01, PS = 111
+		FTM0-> MOD = note_value;
+
+		FTM0->CONTROLS[1].CnSC=0x0028;			//set the FTM to work as a center aligned PWM, MSB=1, ELSn
+		FTM0->CONTROLS[1].CnV = note_value;  //set the  value of the channel to have the required frequency (164kHz/value= f)
+		noteValue=note_value;
+
+		GPIOC->PDDR = (1 << 2); //setting bit <nr> of the port B as output
+
+}
+
+void stopNote(){
+	FTM0->SC =0x0027;
+}
+
+void loopNote(int note_value, int loops){
+	playNote(A4);
+	for(int i=0;i<=loops;i++){
+		for(int j=0; j<=loops;j++){
+			if(j==loops){stopNote();}
+		}
+	}
+}
+void initPWM(){
+	SIM->SCGC6 |= SIM_SCGC6_FTM0_MASK;   //enable the FTM0 clock
+	SIM->SCGC5 |= SIM_SCGC5_PORTC_MASK;  //enable the portc clock
+	PORTC->PCR[2] = PORT_PCR_MUX(4);     //configure as alternative 4
+
+	FTM0->SC = 0x004F; 				//setting time overflow enable interrupt=1, CLKS = 01, PS = 111
+
+}
+
+
+
+void FTM0_IRQHandler(void){
+
+	unsigned long ChVal = FTM0->CONTROLS[1].CnV;
+	(void) FTM0->SC;
+	FTM0->SC |= 0x0080;
+	if (ChVal <noteValue){
+		FTM0->CONTROLS[1].CnV +=noteValue;
+	}else{
+		FTM0->CONTROLS[1].CnV = 0;
+	}
+}

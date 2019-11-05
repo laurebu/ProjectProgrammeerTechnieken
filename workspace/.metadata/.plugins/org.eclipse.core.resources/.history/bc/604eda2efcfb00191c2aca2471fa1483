@@ -1,0 +1,22 @@
+/*
+ * @author: Lander Buysse
+ * @file: speakerControl.h
+ */
+
+#ifndef SPEAKERCONTROL_H
+#define SPEAKERCONTROL_H
+
+/*
+ * prototypes
+ */
+void pause(int delay);
+void initSpeaker(void);
+void note(int,int);
+//tunes to play
+//TODO: add some tunes
+void octave(void);
+void standardAlarmSound(void);
+void A4_Fc4_E4_D4_E4_Fc4(void);
+void Morgenstimmung_EG(void);
+
+#endif //SPEAKERCONTROL_H

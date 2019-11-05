@@ -1,0 +1,11 @@
+/*
+ * @author: Lander Buysse
+ * @file: hardwareInit.c
+ */
+
+//files to include
+#include "speakerDriver.h"
+#include "buttonDriver.h"
+#include "ledDriver.h"
+#include "joystickDriver.h"
+
