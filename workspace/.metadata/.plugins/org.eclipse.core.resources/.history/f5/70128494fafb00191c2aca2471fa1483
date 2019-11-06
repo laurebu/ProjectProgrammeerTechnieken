@@ -1,0 +1,112 @@
+/*
+ * @author: Lander Buysse
+ * @file: speakerControl.c
+ *
+ */
+
+//files to include
+#include "speakerDriver.h"
+#include "speakercontrol.h"
+
+/*
+ * calls the initialize method for the pwm from the speaker driver
+ */
+void initSpeaker(void){
+	initPWM();
+}
+
+/*
+ * pause in between notes or keep a note going for a while
+ */
+void pause(int loops){
+	while(loops--){
+		asm("nop");
+	}
+}
+
+/*
+ * play and note for a specified duration
+ */
+void note(int freq, int duration){
+	playNote(freq);
+	pause(duration);
+}
+
+/*
+ * plays a part of Edvard Grieg's morgenstimmung
+ */
+void Morgenstimmung_EG(void){
+	int delay= 1200000;
+	A4_Fc4_E4_D4_E4_Fc4();
+	stopNote();
+	pause(delay);
+	A4_Fc4_E4_D4_E4_Fc4();
+	stopNote();
+	pause(delay);
+	note(A4,delay);
+	note(Fc4,delay);
+	note(A4,delay);
+	note(B4,delay);
+	note(Fc4,delay);
+	note(B4,delay);
+	note(A4,delay);
+	note(Fc4,delay);
+	note(E4,delay);
+	note(D4,delay);
+	pause(delay);
+	pause(delay);
+	stopNote();
+	pause(50000);
+}
+
+/*
+ * plays an octave forwards and backwards (C4->C5->C4)
+ */
+void octave(){
+	int delay=850000;
+	note(C4,delay);
+	note(D4,delay);
+	note(E4,delay);
+	note(F4,delay);
+	note(G4,delay);
+	note(A4,delay);
+	note(B4,delay);
+	note(C5,delay);
+	note(B4,delay);
+	note(A4,delay);
+	note(G4,delay);
+	note(F4,delay);
+	note(E4,delay);
+	note(D4,delay);
+	note(C4,0);
+}
+
+/*
+ * plays a note sequence (A4_Fc4_E4_D4_E4_Fc4_A4)
+ */
+void A4_Fc4_E4_D4_E4_Fc4_A4(void){
+	int delay= 1200000;
+	note(A4,delay);
+	note(Fc4,delay);
+	note(E4,delay);
+	note(D4,delay);
+	note(E4,delay);
+	note(Fc4,delay);
+	note(A4,delay);
+}
+
+/*
+ * plays an standard alarm sound
+ */
+void standardAlarmSound(void){
+	pause(500000);
+	note(annoying,1100000);
+	stopNote();
+	pause(500000);
+	note(annoying,1100000);
+	stopNote();
+	pause(500000);
+	note(annoying,1100000);
+	stopNote();
+	pause(500000);
+}

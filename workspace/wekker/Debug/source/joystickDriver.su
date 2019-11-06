@@ -1,0 +1,2 @@
+core_cm4.h:1677:22:__NVIC_EnableIRQ	16	static
+joystickDriver.c:15:6:joystickInit	8	static

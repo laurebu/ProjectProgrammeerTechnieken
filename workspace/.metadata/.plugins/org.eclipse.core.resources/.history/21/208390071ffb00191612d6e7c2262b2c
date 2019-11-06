@@ -1,0 +1,32 @@
+/*
+ * @author: Lander Buysse
+ * @file: inputcontrol.h
+ */
+
+
+
+extern int hour_I;
+extern int min_I;
+extern int sec_I;
+extern int alarmOnOff_I;
+
+
+
+typedef enum{HOUR_IX,MIN_IX,SEC_IX} timeParts;
+
+/*
+ * prototypes
+ */
+int getAlarm(void);
+int getHour(void);
+int getMin(void);
+int getSec(void);
+int getState(void);
+char* getSetting(int);
+void setTimeParts(int hourMinSec);
+void setAlarm(int onOff);
+void incrementTime(int hourMinSec);
+void decrementTime(int hourMinSec);
+void initJoystick(void);
+void initSwitch2(void);
+

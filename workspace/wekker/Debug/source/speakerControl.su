@@ -1,0 +1,14 @@
+speakerControl.c:17:5:getAlarmStatus	8	static
+speakerControl.c:23:6:initSpeaker	8	static
+speakerControl.c:30:6:pause	16	static
+speakerControl.c:39:6:note	16	static
+speakerControl.c:47:6:standardAlarmSound	8	static
+speakerControl.c:63:6:Morgenstimmung_EG	16	static
+speakerControl.c:88:6:furElise_LvB	16	static
+speakerControl.c:144:6:octave	16	static
+speakerControl.c:166:6:A4_Fc4_E4_D4_E4_Fc4	16	static
+speakerControl.c:180:6:Gc3_E4_Gc4_B4_C5_A3_E4	16	static
+speakerControl.c:195:6:Gc3_E4_C5_B4_A4	16	static
+speakerControl.c:206:6:A3_C4_E4_A4_B4	16	static
+speakerControl.c:218:6:A5_Fc5_E5_D5_E5_Fc5	16	static
+speakerControl.c:232:6:E5_Dc5_E5_Dc5_E5_B4_D5_C5_A4	16	static
