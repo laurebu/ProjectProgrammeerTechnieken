@@ -1,0 +1,3 @@
+speakerDriver.c:15:6:playNote	24	static
+speakerDriver.c:31:6:stopNote	4	static
+speakerDriver.c:38:6:initPWM	4	static

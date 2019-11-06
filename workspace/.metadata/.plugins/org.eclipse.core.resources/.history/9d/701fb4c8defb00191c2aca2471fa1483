@@ -1,0 +1,18 @@
+/*
+ * @author: Lander Buysse
+ * @file: speakerControl.h
+ */
+
+#ifndef SPEAKERCONTROL_H
+#define SPEAKERCONTROL_H
+
+/*
+ * prototypes
+ */
+void pause(int delay);
+void initSpeaker(void);
+//tunes to play
+//TODO: add some tunes
+void octave(void);
+
+#endif //SPEAKERCONTROL_H

@@ -1,0 +1,31 @@
+/*
+ * @author: Lander Buysse
+ * @file: speakerDriver.h
+ */
+#ifndef SPEAKERDRIVER_H
+#define SPEAKERDRIVER_H
+
+//files to include
+#include "MK64F12.h"
+#include "stdio.h"
+
+//define frequencies
+#define C4 262
+#define D4 294
+#define E4 330
+#define F4 349
+#define G4 392
+#define A4 440
+#define B4 494
+#define C5 523
+
+
+/*
+ * prototypes
+ */
+void initPWM(void);
+void stopNote(void);
+void playNote(int,int);
+void stop(void);
+
+#endif //SPEAKERDRIVER_H

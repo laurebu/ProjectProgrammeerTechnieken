@@ -1,0 +1,39 @@
+/*
+ * @author: Lander Buysse
+ * @file: inputcontrol.h
+ */
+
+extern int hour_I;
+extern int min_I;
+extern int sec_I;
+extern int alarmOnOff_I;
+
+typedef enum{
+	HOUR_I,
+	MIN_I,
+	SEC_I
+}timeParts;
+
+enum changeState{
+	STANDARD_I=0,   //standard state that displays time
+	TIME_I=1,	  //state to set the clock
+	ALARM_I=2,	  //state to set the alarm time
+	MUSIC_I=3,   //state to change the music tune used
+}cState;
+
+/*
+ * prototypes
+ */
+int getAlarm(void);
+int getHour(void);
+int getMin(void);
+int getSec(void);
+int getState(void);
+char* getSetting(int);
+void setTimeParts(int hourMinSec);
+void setAlarm(int onOff);
+void incrementTime(int hourMinSec);
+void decrementTime(int hourMinSec);
+void initJoystick(void);
+void initSwitch2(void);
+
