@@ -27,7 +27,6 @@ void pins_init(void);
 void copy_to_lcd(void);
 void lcd_clear(void);
 void lcd_init(void);
-void line(int x0, int y0, int x1, int y1, int mode);
 void pixel(int x, int y, int mode);
 
 #endif //LCDDRIVER_H

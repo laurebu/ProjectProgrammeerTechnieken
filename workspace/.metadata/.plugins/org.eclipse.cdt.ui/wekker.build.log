@@ -1,16 +1,16 @@
-12:25:15 **** Incremental Build of configuration Debug for project wekker ****
+10:43:03 **** Incremental Build of configuration Debug for project wekker ****
 make -r -j8 all 
-Building file: ../source/inputControl.c
+Building file: ../source/main.c
 Invoking: MCU C Compiler
-arm-none-eabi-gcc -D__REDLIB__ -DCPU_MK64FN1M0VLL12 -DCPU_MK64FN1M0VLL12_cm4 -DFSL_RTOS_BM -DSDK_OS_BAREMETAL -DSDK_DEBUGCONSOLE=0 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -DDEBUG -I../board -I../source -I../ -I../drivers -I../device -I../CMSIS -I../component/serial_manager -I../component/lists -I../component/uart -I../utilities -I../board/boards -O0 -fno-common -g3 -Wall -c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -D__REDLIB__ -fstack-usage -specs=redlib.specs -MMD -MP -MF"source/inputControl.d" -MT"source/inputControl.o" -MT"source/inputControl.d" -o "source/inputControl.o" "../source/inputControl.c"
-Finished building: ../source/inputControl.c
+arm-none-eabi-gcc -D__REDLIB__ -DCPU_MK64FN1M0VLL12 -DCPU_MK64FN1M0VLL12_cm4 -DFSL_RTOS_BM -DSDK_OS_BAREMETAL -DSDK_DEBUGCONSOLE=0 -DCR_INTEGER_PRINTF -DPRINTF_FLOAT_ENABLE=0 -D__MCUXPRESSO -D__USE_CMSIS -DDEBUG -I../board -I../source -I../ -I../drivers -I../device -I../CMSIS -I../component/serial_manager -I../component/lists -I../component/uart -I../utilities -I../board/boards -O0 -fno-common -g3 -Wall -c -ffunction-sections -fdata-sections -ffreestanding -fno-builtin -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -D__REDLIB__ -fstack-usage -specs=redlib.specs -MMD -MP -MF"source/main.d" -MT"source/main.o" -MT"source/main.d" -o "source/main.o" "../source/main.c"
+Finished building: ../source/main.c
  
 Building target: wekker.axf
 Invoking: MCU Linker
-arm-none-eabi-gcc -nostdlib -Xlinker -Map="wekker.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T wekker_Debug.ld -o "wekker.axf"  ./utilities/fsl_debug_console.o ./utilities/fsl_str.o  ./startup/startup_mk64f12.o  ./source/buttonDriver.o ./source/hardwareInit.o ./source/inputControl.o ./source/joystickDriver.o ./source/ledControl.o ./source/ledDriver.o ./source/main.o ./source/speakerControl.o ./source/speakerDriver.o  ./drivers/fsl_adc16.o ./drivers/fsl_clock.o ./drivers/fsl_common.o ./drivers/fsl_dspi.o ./drivers/fsl_gpio.o ./drivers/fsl_i2c.o ./drivers/fsl_rtc.o ./drivers/fsl_smc.o ./drivers/fsl_uart.o  ./device/system_MK64F12.o  ./component/uart/uart_adapter.o  ./component/serial_manager/serial_manager.o ./component/serial_manager/serial_port_uart.o  ./component/lists/generic_list.o  ./board/boards/board.o ./board/boards/clock_config.o ./board/boards/peripherals.o ./board/boards/pin_mux.o   
+arm-none-eabi-gcc -nostdlib -Xlinker -Map="wekker.map" -Xlinker --gc-sections -Xlinker -print-memory-usage -Xlinker --sort-section=alignment -Xlinker --cref -mcpu=cortex-m4 -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -T wekker_Debug.ld -o "wekker.axf"  ./utilities/fsl_debug_console.o ./utilities/fsl_str.o  ./startup/startup_mk64f12.o  ./source/buttonDriver.o ./source/hardwareInit.o ./source/inputControl.o ./source/joystickDriver.o ./source/lcdControl.o ./source/lcdDriver.o ./source/ledControl.o ./source/ledDriver.o ./source/main.o ./source/speakerControl.o ./source/speakerDriver.o  ./drivers/fsl_adc16.o ./drivers/fsl_clock.o ./drivers/fsl_common.o ./drivers/fsl_dspi.o ./drivers/fsl_gpio.o ./drivers/fsl_i2c.o ./drivers/fsl_rtc.o ./drivers/fsl_smc.o ./drivers/fsl_uart.o  ./device/system_MK64F12.o  ./component/uart/uart_adapter.o  ./component/serial_manager/serial_manager.o ./component/serial_manager/serial_port_uart.o  ./component/lists/generic_list.o  ./board/boards/board.o ./board/boards/clock_config.o ./board/boards/peripherals.o ./board/boards/pin_mux.o   
 Memory region         Used Size  Region Size  %age Used
-   PROGRAM_FLASH:        8496 B         1 MB      0.81%
-      SRAM_UPPER:        8488 B       192 KB      4.32%
+   PROGRAM_FLASH:       10064 B         1 MB      0.96%
+      SRAM_UPPER:        9000 B       192 KB      4.58%
       SRAM_LOWER:          0 GB        64 KB      0.00%
         FLEX_RAM:          0 GB         4 KB      0.00%
 Finished building target: wekker.axf
@@ -19,11 +19,11 @@ make --no-print-directory post-build
 Performing post-build steps
 arm-none-eabi-size "wekker.axf" ; arm-none-eabi-objcopy -v -O binary "wekker.axf" "wekker.bin" ; checksum -p MK64FN1M0xxx12 -d "wekker.bin"
    text	   data	    bss	    dec	    hex	filename
-   8496	      0	   8488	  16984	   4258	wekker.axf
+  10064	      0	   9000	  19064	   4a78	wekker.axf
 copy from `wekker.axf' [elf32-littlearm] to `wekker.bin' [binary]
 Written checksum 0xdffcf282 at offset 0x1c in file wekker.bin
 Previous value 0x00000000 at offset 0x1c in file wekker.bin
  
 
-12:25:16 Build Finished. 0 errors, 0 warnings. (took 1s.412ms)
+10:43:04 Build Finished. 0 errors, 0 warnings. (took 934ms)
 

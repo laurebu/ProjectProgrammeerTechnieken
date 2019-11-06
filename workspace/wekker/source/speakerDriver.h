@@ -5,10 +5,6 @@
 #ifndef SPEAKERDRIVER_H
 #define SPEAKERDRIVER_H
 
-//files to include
-#include "MK64F12.h"
-#include "stdio.h"
-
 //define frequencies
 #define E3 165
 #define Gc3 208 //G#3 but # can't be used

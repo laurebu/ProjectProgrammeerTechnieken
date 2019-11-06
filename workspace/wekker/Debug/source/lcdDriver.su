@@ -8,4 +8,3 @@ lcdDriver.c:95:6:copy_to_lcd	32	static
 lcdDriver.c:143:6:lcd_clear	16	static
 lcdDriver.c:156:6:lcd_init	8	static
 lcdDriver.c:190:6:pixel	24	static
-lcdDriver.c:209:6:line	56	static

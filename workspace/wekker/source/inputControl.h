@@ -5,6 +5,8 @@
 #ifndef INPUTCONTROL_H
 #define INPUTCONTROL_H
 
+#define INTERRUPT_MASK_24 0x01000000
+
 typedef enum{
 	HOUR_I=0,
 	MIN_I=1,

@@ -8,7 +8,7 @@
 #include "speakerDriver.h"
 #include "speakercontrol.h"
 #include "main.h"
-
+#include <stdio.h>
 /*
  * return the current alarm status
  * 0=off

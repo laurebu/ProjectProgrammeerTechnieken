@@ -5,9 +5,6 @@
 #ifndef LEDDRIVER_H
 #define LEDDRIVER_H
 
-//files to include
-#include "stdio.h"
-
 //define the value of the GPIO pin for each led
 #define BLUE_FRDM	21		//blue led on the frdm-k64f
 #define RED_FRDM    22		//red led on the frdm-k64f

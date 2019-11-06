@@ -5,7 +5,7 @@
 
 //files to include
 #include "inputControl.h"
-#include "stdio.h"
+#include <stdio.h>
 #include "joystickDriver.h"
 #include "buttonDriver.h"
 #include "MK64F12.h"
@@ -263,7 +263,7 @@ void PORTC_IRQHandler(void){
 	switch(getState()){
 			case 0: //STANDARD
 				//joystick left
-				if((PORTC->PCR[LEFT] & 0x01000000)==0x01000000){ //check if interrupt was called on left pin
+				if((PORTC->PCR[LEFT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on left pin
 					if (selectState==0){ //go to the previous option
 						selectState=3;
 					}
@@ -275,7 +275,7 @@ void PORTC_IRQHandler(void){
 						//=>getSetting(selectState)
 				}
 				//joystick right
-				if((PORTC->PCR[RIGHT] & 0x01000000)==0x01000000){ //check if interrupt was called on right pin
+				if((PORTC->PCR[RIGHT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on right pin
 					selectState=(selectState+1)%4; //go to the next option
 					PORTC->PCR[RIGHT] &= ~(0 << 24); //clear the interrupt for the right pin
 					//TODO: show the selected option
@@ -284,7 +284,7 @@ void PORTC_IRQHandler(void){
 				break;
 			case 1: //SETTIME
 				//joystick left
-				if((PORTC->PCR[LEFT] & 0x01000000)==0x01000000){//check if interrupt was called on left pin
+				if((PORTC->PCR[LEFT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){//check if interrupt was called on left pin
 					if (timePart==0){ //go to the previous option
 						timePart=2;
 					}
@@ -294,14 +294,14 @@ void PORTC_IRQHandler(void){
 					PORTC->PCR[LEFT] &= ~(0 << 24); //clear the interrupt for the left pin
 				}
 				//joystick right
-				if((PORTC->PCR[RIGHT] & 0x01000000)==0x01000000){ //check if interrupt was called on right pin
+				if((PORTC->PCR[RIGHT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on right pin
 					timePart=(timePart+1)%3; //go to the next option
 					PORTC->PCR[RIGHT] &= ~(0 << 24); //clear the interrupt for the right pin
 				}
 				break;
 			case 2: //SETALARM
 				//joystick left
-				if((PORTC->PCR[LEFT] & 0x01000000)==0x01000000){//check if interrupt was called on left pin
+				if((PORTC->PCR[LEFT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){//check if interrupt was called on left pin
 					if (alarmPart==0){ //go to the previous option
 						alarmPart=2;
 					}else{
@@ -310,7 +310,7 @@ void PORTC_IRQHandler(void){
 					PORTC->PCR[LEFT] &= ~(0 << 24); //clear the interrupt for the left pin
 				}
 				//joystick right
-				if((PORTC->PCR[RIGHT] & 0x01000000)==0x01000000){ //check if interrupt was called on right pin
+				if((PORTC->PCR[RIGHT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on right pin
 					alarmPart=(alarmPart+1)%3; //go to the next option
 					PORTC->PCR[RIGHT] &= ~(0 << 24); //clear the interrupt for the right pin
 				}
@@ -318,7 +318,7 @@ void PORTC_IRQHandler(void){
 			case 3: //SETMUSIC
 				//TODO:implement this,
 				//joystick left
-				if((PORTC->PCR[LEFT] & 0x01000000)==0x01000000){ //check if interrupt was called on left pin
+				if((PORTC->PCR[LEFT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on left pin
 					if (tune==0){ //go to the previous option
 						tune=3;
 					}else{
@@ -327,14 +327,14 @@ void PORTC_IRQHandler(void){
 					PORTC->PCR[LEFT] &= ~(0 << 24); //clear the interrupt for the left pin
 				}
 				//joystick right
-				if((PORTC->PCR[RIGHT] & 0x01000000)==0x01000000){ //check if interrupt was called on right pin
-					tune=(tune+1)%4//Set next tune
+				if((PORTC->PCR[RIGHT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on right pin
+					tune=(tune+1)%4; //Set next tune
 					PORTC->PCR[RIGHT] &= ~(0 << 24); //clear the interrupt for the right pin
 				}
 				break;
 			case 4: //ALARM
 				//joystick left or right ==> do nothing and clear the interrupts
-				if(((PORTC->PCR[LEFT] & 0x01000000)==0x01000000) || ((PORTC->PCR[RIGHT] & 0x01000000)==0x01000000)){
+				if(((PORTC->PCR[LEFT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24) || ((PORTC->PCR[RIGHT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24)){
 					PORTC->PCR[LEFT] &= ~(0 << 24); //clear the interrupt for the left pin
 					PORTC->PCR[RIGHT] &= ~(0 << 24); //clear the interrupt for the right pin
 				}
@@ -356,71 +356,71 @@ void PORTC_IRQHandler(void){
 void PORTB_IRQHandler(void){
 	switch(getState()){
 		case 0: //STANDARD
-			if((PORTB->PCR[CENTER] & 0x01000000)==0x01000000){ //check if interrupt was called on CENTER pin
+			if((PORTB->PCR[CENTER] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
 				setState((int)selectState); //go to the selected state
 				PORTB->PCR[CENTER] &= ~(0 << 24);  //Clear the interrupt for the CENTER pin
 			}
 			//nothing needs to happen here for the up and down pins so just clear the interrupts
-			if(((PORTB->PCR[UP] & 0x01000000)==0x01000000) || ((PORTB->PCR[DOWN] & 0x01000000)==0x01000000)){
+			if(((PORTB->PCR[UP] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24) || ((PORTB->PCR[DOWN] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24)){
 				PORTB->PCR[UP] &= ~(0 << 24);  // clear the interrupt for the up pin
 				PORTB->PCR[DOWN] &= ~(0 << 24); //clear the interrupt for the down pin
 			}
 			break;
 		case 1: //SETTIME
 			//joystick center
-			if((PORTB->PCR[CENTER] & 0x01000000)==0x01000000){ //check if interrupt was called on CENTER pin
+			if((PORTB->PCR[CENTER] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
 				setState(0); //0==STANDARD state
 				timePart=0; //Set back to hour_time
 				PORTB->PCR[CENTER] &= ~(0 << 24);  //Clear the interrupt for the CENTER pin
 			}
 			//joystick down
-			if((PORTB->PCR[DOWN] & 0x01000000)==0x01000000){ //check if interrupt was called on DOWN pin
+			if((PORTB->PCR[DOWN] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on DOWN pin
 				decrementTime(timePart); //decrement hour, min or sec
 				PORTB->PCR[DOWN] &= ~(0 << 24); //clear the interrupt for the DOWN pin
 			}
 			//joystick up
-			if((PORTB->PCR[UP] & 0x01000000)==0x01000000){ //check if interrupt was called on up pin
+			if((PORTB->PCR[UP] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on up pin
 				incrementTime(timePart); //increment hour, min or sec
 				PORTB->PCR[UP] &= ~(0 << 24);  //clear the interrupt for the UP pin
 			}
 			break;
 		case 2: //SETALARM
 			//joystick center
-			if((PORTB->PCR[CENTER] & 0x01000000)==0x01000000){ //check if interrupt was called on CENTER pin
+			if((PORTB->PCR[CENTER] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
 				setState(0); //0==STANDARD state
 				timePart=0; //Set back to hour_time
 				PORTB->PCR[CENTER] &= ~(0 << 24);  //Clear the interrupt for the center pin
 			}
 			//joystick down
-			if((PORTB->PCR[DOWN] & 0x01000000)==0x01000000){ //check if interrupt was called on CENTER pin
+			if((PORTB->PCR[DOWN] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
 				decrementAlarm(alarmPart); //decrement hour, min or sec of the alarm
 				PORTB->PCR[DOWN] &= ~(0 << 24);//clear the interrupt for the DOWN pin
 			}
 			//joystick up
-			if((PORTB->PCR[UP] & 0x01000000)==0x01000000){ //check if interrupt was called on up pin
+			if((PORTB->PCR[UP] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on up pin
 				incrementAlarm(alarmPart); //increment hour, min or sec of the alarm
 				PORTB->PCR[UP] &= ~(0 << 24);  //clear the interrupt for the UP pin
 			}
 			break;
 		case 3: //SETMUSIC
 			//joystick center
-			if((PORTB->PCR[CENTER] & 0x01000000)==0x01000000){ //check if interrupt was called on CENTER pin
+			if((PORTB->PCR[CENTER] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
 				setState(0); //0==STANDARD state
 				PORTB->PCR[CENTER] &= ~(0 << 24);  //Clear the interrupt for the center pin
 			}
 			//joystick up
-			if((PORTB->PCR[UP] & 0x01000000)==0x01000000){ //check if interrupt was called on UP pin
+			if((PORTB->PCR[UP] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on UP pin
 				PORTB->PCR[UP] &= ~(0 << 24);  //Clear the interrupt for the up pin
 			}
 			//joystick down
-			if((PORTB->PCR[DOWN] & 0x01000000)==0x01000000){ //check if interrupt was called on DOWN pin
+			if((PORTB->PCR[DOWN] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on DOWN pin
 				PORTB->PCR[DOWN] &= ~(0 << 24);  //Clear the interrupt for the down pin
 			}
 			break;
 		case 4: //ALARM
 			//TODO: implement this
 			//joystick center
-			if((PORTB->PCR[CENTER] & 0x01000000)==0x01000000){ //check if interrupt was called on CENTER pin
+			if((PORTB->PCR[CENTER] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
 				setAlarm(0);
 				setState(0); //0==STANDARD state
 				PORTB->PCR[CENTER] &= ~(0 << 24);  //Clear the interrupt for the center pin

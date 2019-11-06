@@ -12,4 +12,4 @@ inputControl.c:166:6:decrementTime	16	static
 inputControl.c:198:6:incrementAlarm	16	static
 inputControl.c:230:6:decrementAlarm	16	static
 inputControl.c:262:6:PORTC_IRQHandler	8	static
-inputControl.c:346:6:PORTB_IRQHandler	8	static
+inputControl.c:356:6:PORTB_IRQHandler	8	static

@@ -1,0 +1,10 @@
+/*
+ * @author: Laure Buysse
+ * @file: lcdControl.c
+ */
+
+//files to include
+#include <stdio.h>
+#include "lcdControl.h"
+
+//hint: how to get char from string

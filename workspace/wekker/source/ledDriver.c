@@ -6,6 +6,7 @@
 //files to include
 #include "ledDriver.h"
 #include "MK64F12.h"
+#include <stdio.h>
 
 /*
  * turn on led

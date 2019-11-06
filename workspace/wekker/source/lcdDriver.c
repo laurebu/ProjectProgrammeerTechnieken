@@ -163,7 +163,7 @@ void lcd_init(){
 	GPIOD->PDOR |= (1 << RESET); 		//stop reset
 
 	/* Set start value chip select and clock */
-	GPIOD->PDOR |= (1 << RESET);		//set chip select to inactive??
+	GPIOD->PDOR |= (1 << RESET);		//set chip select to inactive
 	GPIOD->PDOR |= (1 << SCK);		//set clock to inactive
 
 	/* Init commands for lcd */
@@ -202,74 +202,7 @@ void pixel(int x, int y, int mode){
 	}
 }
 
-/*
- * TODO: add documentation
- * Set (mode 1) or erase (mode 0) a line
- */
-void line(int x0, int y0, int x1, int y1, int mode){
-	/* Make sure the pixel is on the screen*/
-	if(x0 > 127 || y0 > 31 || x0 < 0 || y0 < 0 || x1 > 127 || y1 > 31 || x1 < 0 || y1 < 0) return;
 
-	/* Check if the line needs to be erased or set */
-	if(mode == 1){
-		/* Set line */
-		if(y0 == y1){
-			/* Horizontal line (y0 == y1) */
-			int length = abs(x1-x0);
-
-			for(int i=0; i<length;i++){
-				if(x0 < x1){
-					pixel(x0+i,y0,1);
-				}
-				else {
-					pixel(x1+1,y0,1);
-				}
-			}
-		}
-		else {
-			/* Vertical line (x0 == x1) */
-			int length = abs(y1-y0);
-
-			for(int i=0; i<length; i++){
-				if(y0 < y1){
-					pixel(x0,y0+i,1);
-				}
-				else {
-					pixel(x0,y1+1,1);
-				}
-			}
-		}
-	}
-	/* Erase line */
-	else {
-		if(y0 == y1){
-			/* Horizontal line (y0 == y1) */
-			int length = abs(x1-x0);
-
-			for(int i=0; i<length;i++){
-				if(x0 < x1){
-					pixel(x0+i,y0,0);
-				}
-				else {
-					pixel(x1+1,y0,0);
-				}
-			}
-		}
-		else {
-			/* Vertical line (x0 == x1) */
-			int length = abs(y1-y0);
-
-			for(int i=0; i<length; i++){
-				if(y0 < y1){
-					pixel(x0,y0+i,0);
-				}
-				else {
-					pixel(x0,y1+1,0);
-				}
-			}
-		}
-	}
-}
 
 
 

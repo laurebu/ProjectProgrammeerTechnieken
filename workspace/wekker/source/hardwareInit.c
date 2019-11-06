@@ -8,7 +8,8 @@
 #include "buttonDriver.h"
 #include "ledDriver.h"
 #include "joystickDriver.h"
-//add files for lcd here TODO
+#include "lcdDriver.h"
+#include <stdio.h>
 
 /*
  * initialises the drivers
@@ -18,5 +19,5 @@ void init(void){
 	//initialise the required leds TODO
 	joystickInit(); //initialises the joystick
 	SW2Init(); //initialises switch2
-
+	lcd_init();//initialises the lcd screen
 }

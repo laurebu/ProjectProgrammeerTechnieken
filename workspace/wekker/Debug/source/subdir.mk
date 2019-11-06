@@ -8,6 +8,8 @@ C_SRCS += \
 ../source/hardwareInit.c \
 ../source/inputControl.c \
 ../source/joystickDriver.c \
+../source/lcdControl.c \
+../source/lcdDriver.c \
 ../source/ledControl.c \
 ../source/ledDriver.c \
 ../source/main.c \
@@ -19,6 +21,8 @@ OBJS += \
 ./source/hardwareInit.o \
 ./source/inputControl.o \
 ./source/joystickDriver.o \
+./source/lcdControl.o \
+./source/lcdDriver.o \
 ./source/ledControl.o \
 ./source/ledDriver.o \
 ./source/main.o \
@@ -30,6 +34,8 @@ C_DEPS += \
 ./source/hardwareInit.d \
 ./source/inputControl.d \
 ./source/joystickDriver.d \
+./source/lcdControl.d \
+./source/lcdDriver.d \
 ./source/ledControl.d \
 ./source/ledDriver.d \
 ./source/main.d \
