@@ -6,7 +6,7 @@
  * Generated linker script file for MK64FN1M0xxx12
  * Created from linkscript.ldt by FMCreateLinkLibraries
  * Using Freemarker v2.3.23
- * MCUXpresso IDE v11.0.1 [Build 2563] [2019-09-01] on 06-Nov-2019 10:43:03
+ * MCUXpresso IDE v11.0.1 [Build 2563] [2019-09-01] on 06-Nov-2019 18:39:47
  */
 
 INCLUDE "wekker_Debug_library.ld"

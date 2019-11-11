@@ -37,8 +37,10 @@ void pause(int loops){
  * play and note for a specified duration
  */
 void note(int freq, int duration){
-	playNote(freq);
-	pause(duration);
+	if(getAlarm()==1){
+		playNote(freq);
+		pause(duration);
+	}
 }
 
 /*
@@ -240,4 +242,26 @@ void E5_Dc5_E5_Dc5_E5_B4_D5_C5_A4(void){
 	note(D5,delay);
 	note(C5,delay);
 	note(A4,delay*2);
+}
+
+/*
+ * plays the selected music tune
+ */
+void playMusic(int nr){
+	switch(getTuneNr()){
+		case 0:
+			standardAlarmSound();
+			break;
+		case 1:
+			furElise_LvB();
+			break;
+		case 2:
+			Morgenstimmung_EG();
+			break;
+		case 3:
+			octave();
+			break;
+		default:
+			break;
+	}
 }
