@@ -17,7 +17,8 @@
 void init(void){
 	initPWM(); //initialises the PWM for the speaker
 	//initialise the required leds TODO
+	initialiseLed(BLUE_FRDM);
+	initialiseLed(RED_AP);
 	joystickInit(); //initialises the joystick
-	SW2Init(); //initialises switch2
 	lcd_init();//initialises the lcd screen
 }

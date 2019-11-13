@@ -53,105 +53,71 @@ void setState(int stateValue){
  */
 int main(void) {
 	init();
+	turnOff(RED_A);
+	turnOff(BLUE_F);
 	initEnums(); //initialises some values of the enums defined in inputcontrol
-	state=SETMUSIC; //TODO test the state using this dont forget to put it back to standard
-	setAlarm(0);
-
-	/*
-	//TODO: test all the states, and the ways to change setting and states
-	state=STANDARD;
-	//call these two in hardwareInitialisation, i'll make this later
-	//also turn the annoying red led of in there!!!!
-	initSwitch2();
-	initJoystick();
-	setAlarm(0);
+	setAlarm(0); //make sure the alarm isn't going off
+	setDisplay(1);
 
 	//we start in the standard state
-	state=STANDARD;
+	state=ALARM;
 
 	while(1){ //keep looping through the different states maybe make a start/stop??
 			  //using the other switch (sw3), shouldn't be a problem==>need to change button driver
 		switch(state){
 			case STANDARD:
-
+				//TODO first check if we don't need to go to the alarmstate
+				if(getDisplay()==2){
+					//TODO display the setting
+					printf("%s \n",getSetting(getSettingNr()));
+					setDisplay(0);
+				}
+				if(getDisplay()==1){
+					//TODO display the time here (every second)
+				}
 				//displayTime(hour,min,sec) every time time is changed in this state?
 				//test to make sure we don't need to go to the alarm state here
 
-				//this part is just to test, will remove this later
-				initialise(BLUE_FRDM);
-				turnOn(BLUE_FRDM);
-				delay(500000);
-				turnOff(BLUE_FRDM);
 				break;
 			case SETTIME:
-
-				//in this state the clock will be set
-				//this is done automatically using the input control
-				//use methods, getHour(), getMin(), getSec() to get the time
-				//then display the time,
-					//perhaps from inputcontrol call a method in main that calls method to do this
-					//this can be done while at the end of the methods IncrementTime and decrementTime
-
-				//test if changing the time works, also best remove this later
-				while(state==1){
-					delay(500000);
-					printf("Time: %d: %d: %d:",getHour(),getMin(),getSec());
+				//state to set the time, time changing is done automatically using interrupts
+				if(getDisplay()==1){
+					//TODO change the printf to a writeToLCD LAURE I NEED A METHOD HERE
+					printf("Time: %d: %d: %d: \n",getHour(),getMin(),getSec());
+					setDisplay(0); //indicate that the changed time has been displayed
 				}
-
-				//this part is just to test, will remove this later
-				initialise(RED_FRDM);
-				turnOn(RED_FRDM);
-				delay(500000);
-				turnOff(RED_FRDM);
-
-
 				break;
 			case SETALARM:
-
-				//test is changing the time works, also best remove this later
-				while(state==1){
-					delay(500000);
-					printf("AlarmTime: %d: %d: %d:",getHour(),getMin(),getSec());
+				//state to set the alarm, alarm changing is done automatically using interrupts
+				if(getDisplay()==1){
+					//TODO method to display time here
+					printf("Alarm time: %d: %d: %d: \n",getHourAlarm(),getMinAlarm(),getSecAlarm());
+					setDisplay(0); //indicate that the changed alarm time has been displayed
 				}
-
-				//this part is just to test, will remove this later
-				initialise(GREEN_FRDM);
-				turnOn(GREEN_FRDM);
-				delay(500000);
-				turnOff(GREEN_FRDM);
 				break;
 			case SETMUSIC:
 				//state to set the music tune
-				//well once we find a way to fix the damn speaker
-
-				//this part is just to test, will remove this later
-				initialise(GREEN_AP);
-				turnOn(GREEN_AP);
-				delay(500000);
-				turnOff(GREEN_AP);
+				if(getDisplay()==1){
+					//TODO method to display a string here
+					printf("%s \n",getTune(getTuneNr()));
+					setDisplay(0);
+				}
 				break;
 			case ALARM:
 				//state in which the alarm goes off
 				setAlarm(1); //sets the alarm variable alarmOnOff in inputcontrol
-				//alarmOnOff will be turned off automatically from inputcontrol when the button is pushed
-				//while alarm var is set (alarmOnOff==1)
-					//play music
-					//blinking a led
-					//blinking the hour??
-				//else
-					//stop everything above
-					//go back to standard: state=STANDARD or state=0
-
-				//this part is just to test, will remove this later
-				initialise(BLUE_FRDM);
-				turnOn(BLUE_FRDM);
-				delay(500000);
-				turnOff(BLUE_FRDM);
+				//turn on led
+				turnOn(BLUE_F);
+				while(getAlarm()==1){
+					playMusic(getTuneNr());
+				}
+				turnOff(BLUE_F);
+				state=STANDARD;
 				break;
 			default:
 				state=STANDARD; //just in case something went wrong
 				break;
 		}
-	}*/
+	}
 	return 0;
 }

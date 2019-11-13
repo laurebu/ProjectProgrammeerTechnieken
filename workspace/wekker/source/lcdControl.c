@@ -6,6 +6,7 @@
 //files to include
 #include <stdio.h>
 #include "lcdControl.h"
+#include "lcdDriver.h"
 
 /*hint: how to get char from string
 void writeString(char* str, int strLength){

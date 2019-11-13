@@ -30,5 +30,4 @@ void SW2Init(void){
     GPIOC->PDDR |= (0 << 6);            //Configure switch as Input
 
     PORTC->ISFR = PORT_ISFR_ISF(0x40); //Clear interrupt status flag
-    NVIC_EnableIRQ(PORTC_IRQn);        //Enable the interrupt
 }

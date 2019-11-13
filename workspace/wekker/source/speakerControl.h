@@ -27,5 +27,5 @@ void Gc3_E4_Gc4_B4_C5_A3_E4(void);
 void Gc3_E4_C5_B4_A4(void);
 void Morgenstimmung_EG(void);
 void furElise_LvB(void);
-
+void playMusic(int);
 #endif //SPEAKERCONTROL_H
