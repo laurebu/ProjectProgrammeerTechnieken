@@ -3,13 +3,19 @@
  * @file: lcdDriver.c
  */
 
-//files to include
+/*
+ * files to
+ */
 #include "lcdDriver.h"
+
 #include <stdio.h>
 #include "MK64F12.h"
 #include <stdlib.h>
 
-uint8_t buffer[BUFFER_SIZE];
+
+
+uint8_t yposition = 0;
+uint8_t xposition = 0;
 
 /*
  * delay function in ms
@@ -28,7 +34,7 @@ void delay_us(int us) {
 /*
  * TODO: add documentation
  */
-void spi_write(unsigned char command){
+void spi_write(uint8_t command){
 	GPIOD->PDOR &= ~(1 << nCS); 			// chip select low
 
 	for(int n=8; n>0; n--){
@@ -50,7 +56,7 @@ void spi_write(unsigned char command){
 /*
  * TODO: add documentation
  */
-void lcd_data(unsigned char data) //Data Output Serial Interface
+void lcd_data(uint8_t data) //Data Output Serial Interface
 {
 	GPIOC->PDOR |= (1 << A0);			// use data mode
 	spi_write(data);
@@ -59,7 +65,7 @@ void lcd_data(unsigned char data) //Data Output Serial Interface
 /*
  * TODO: add documentation
  */
-void lcd_comm(unsigned char command) //Command Output Serial Interface
+void lcd_comm(uint8_t command) //Command Output Serial Interface
 {
 	GPIOC->PDOR &= ~(1 << A0);			// use command mode
 	spi_write(command);
@@ -80,7 +86,7 @@ void pins_init()
 	PORTD->PCR[RESET] |= PORT_PCR_MUX(1);	// Reset enabled
 	PORTC->PCR[A0] |= PORT_PCR_MUX(1);		// A0 enabled (data/command pin)
 
-	  /* Port Direction Register */
+	/* Port Direction Register */
 	GPIOD->PDDR |= (1 << nCS);				// Set all needed pins as output
 	GPIOD->PDDR |= (1 << SCK);
 	GPIOD->PDDR |= (1 << MOSI);
@@ -92,62 +98,39 @@ void pins_init()
 /*
  * TODO: add documentation
  */
-void copy_to_lcd(){
-	/* Set starting page */
-	char page = 0xB0;
+void clear_lcd(){
+	clear_line(0);
+	clear_line(1);
+	clear_line(2);
+	clear_line(3);
+}
 
-	/* Page 0*/
+void clear_line(int line){
 	lcd_comm(0x00);
 	lcd_comm(0x10);
+	char page;
+	switch(line){
+		case 0:
+			page=0xB0;
+			break;
+		case 1:
+			page=0xB1;
+			break;
+		case 2:
+			page=0xB2;
+			break;
+		case 3:
+			page=0xB3;
+			break;
+		default:
+			page=0xB0;
+			break;
+	}
 	lcd_comm(page);
 
 	for(int i=0; i<128; i++){
-		lcd_data(buffer[i]);
+		lcd_data(0x00);
 	}
-
-	/* Page 1*/
-	page++;
-	lcd_comm(0x00);
-	lcd_comm(0x10);
-	lcd_comm(page);
-
-	for(int i=128; i<256; i++){
-		lcd_data(buffer[i]);
-	}
-
-	/* Page 2 */
-	page++;
-	lcd_comm(0x00);
-	lcd_comm(0x10);
-	lcd_comm(page);
-
-	for(int i=256; i<384; i++){
-		lcd_data(buffer[i]);
-	}
-
-	/* Page 2 */
-	page++;
-	lcd_comm(0x00);
-	lcd_comm(0x10);
-	lcd_comm(page);
-
-	for(int i=384; i<512; i++){
-		lcd_data(buffer[i]);
-	}
-
-}
-
-/*
- * TODO: add documentation
- */
-void lcd_clear(){
-	/* Create an empty buffer*/
-	for(int i=0; i<512; i++){
-		buffer[i] = 0x00;
-	}
-
-	/* Write buffer to lcd */
-	copy_to_lcd();
 }
 
 /*
@@ -180,27 +163,32 @@ void lcd_init(){
 	lcd_comm(0xA6);
 
 	/* Clear screen*/
-	lcd_clear();
+	clear_lcd();
+
+	// Set beginning position
+	set_pos(0,0);
 }
 
-/*
- * TODO: add documentation
- * Set (mode 1) or erase (mode 0) one pixel (position: (x, y))
- */
-void pixel(int x, int y, int mode){
-	/* Make sure the pixel is on the screen*/
-	if(x > 127 || y > 31 || x < 0 || y < 0) return;
-
-	/* Check if the pixel needs to be erased or set */
-	if(mode == 1){
-		/* 8 bits per value in buffer, 128 columns, so offset of 128*n bits when y%8 = n */
-		buffer[x+(y/8)*128] |= (1 << y%8);
-	}
-	else {
-		/* 8 bits per value in buffer, 128 columns, so offset of 128*n bits when y%8 = n */
-		buffer[x+(y/8)*128] &= ~(1 << y%8);
+void set_pos(uint8_t x, uint8_t y){
+	//check to see position is within screen limits (128 x 32)
+	if (x < 127 || y < 32 || x > 0 || y > 0) {
+		//set column high, column low and page address
+	    lcd_comm(x & 0x0F);      			// set column low nibble
+	    lcd_comm(0x10 | (x >> 4));      	// set column high  nibble
+	    lcd_comm(0xB0 | (y >> 3));      	// set page address
+	    xposition = x;						// set current position (x)
+	    yposition = y;						// set current position (y)
 	}
 }
+
+uint8_t get_xpos(void){
+	return xposition;
+}
+
+uint8_t get_ypos(void){
+	return yposition;
+}
+
 
 
 

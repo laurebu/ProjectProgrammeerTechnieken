@@ -1,73 +1,22 @@
 /*
  * @author: Lander Buysse
  * @file: ledDriver.c
+ *
+ * @description: .c file for the led driver:
+ * 						contains methods to initialise, turn on and turn off a led
  */
 
-//files to include
+/* * * * * * * * * * *
+ * files to include  *
+ * * * * * * * * * * */
 #include "ledDriver.h"
 #include "MK64F12.h"
 #include <stdio.h>
 
-/*
- * turn on led
- *
- * nr --> GPIO nr (values defined in ledDriver.h)
- */
-void turnOnLed(int nr){
-	switch(nr){
-		case BLUE_FRDM:
-		case RED_FRDM:
-			GPIOB->PDOR = (0 << nr); //turn on led
-			break;
-		case GREEN_FRDM:
-			GPIOE->PDOR = (0 << nr); //turn on led
-			break;
-		case BLUE_AP:
-		case GREEN_AP:
-			GPIOC->PDOR = (0 << nr); //turn on led
-			break;
-		case RED_AP:
-			GPIOA->PDOR = (0 << nr); //turn on led
-			break;
-		default:
-			break;
-	}
-}
+/* * * * * *
+ * methods *
+ * * * * * */
 
-/*
- * turn off led
- *
- * nr --> GPIO nr (values defined in ledDriver.h)
- */
-void turnOffLed(int nr){
-	switch(nr){
-			case BLUE_FRDM:
-			case RED_FRDM:
-				GPIOB->PDOR = (1 << nr); //turn off led
-				break;
-			case GREEN_FRDM:
-				GPIOE->PDOR = (1 << nr); //turn off led
-				break;
-			case BLUE_AP:
-			case GREEN_AP:
-				GPIOC->PDOR = (1 << nr); //turn off led
-				break;
-			case RED_AP:
-				GPIOA->PDOR = (1 << nr); //turn off led
-				break;
-			default:
-				break;
-		}
-}
-
-/*
- * initialise led by:
- * 		 enabling port clock control gate,
- * 		 configure leds as alternative 1
- * 		 set the pin as output
- *
- * 		 nr --> GPIO nr (values defined in ledDriver.h)
- */
 void initialiseLed(int nr){
 	switch(nr){
 		case BLUE_FRDM:
@@ -96,4 +45,47 @@ void initialiseLed(int nr){
 			break;
 	}
 }
+
+void turnOnLed(int nr){
+	switch(nr){
+		case BLUE_FRDM:
+		case RED_FRDM:
+			GPIOB->PDOR = (0 << nr); //turn on led
+			break;
+		case GREEN_FRDM:
+			GPIOE->PDOR = (0 << nr); //turn on led
+			break;
+		case BLUE_AP:
+		case GREEN_AP:
+			GPIOC->PDOR = (0 << nr); //turn on led
+			break;
+		case RED_AP:
+			GPIOA->PDOR = (0 << nr); //turn on led
+			break;
+		default:
+			break;
+	}
+}
+
+void turnOffLed(int nr){
+	switch(nr){
+			case BLUE_FRDM:
+			case RED_FRDM:
+				GPIOB->PDOR = (1 << nr); //turn off led
+				break;
+			case GREEN_FRDM:
+				GPIOE->PDOR = (1 << nr); //turn off led
+				break;
+			case BLUE_AP:
+			case GREEN_AP:
+				GPIOC->PDOR = (1 << nr); //turn off led
+				break;
+			case RED_AP:
+				GPIOA->PDOR = (1 << nr); //turn off led
+				break;
+			default:
+				break;
+		}
+}
+
 

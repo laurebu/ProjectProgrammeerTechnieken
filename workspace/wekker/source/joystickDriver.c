@@ -3,15 +3,25 @@
  * @file: joystickDriver.c
  */
 
-//files to include
-#include "inputControl.h"
+/* * * * * * * * * * *
+ * files to include  *
+ * * * * * * * * * * */
 #include <stdio.h>
 #include "joystickDriver.h"
 #include "MK64F12.h"
+/* * * * * * *
+ * variables *
+ * * * * * * */
+int joystickLeft=0;
+int joystickRight=0;
+int joystickUp=0;
+int joystickDown=0;
+int joystickCenter=0;
 
-/*
- * initialise the joystick
- */
+/* * * * * *
+ * methods *
+ * * * * * */
+
 void joystickInit(void){
 
 	SIM->SCGC5 |= SIM_SCGC5_PORTB_MASK; //Enable port B Clock Gate Control
@@ -54,6 +64,69 @@ void joystickInit(void){
 	NVIC_EnableIRQ(PORTC_IRQn);     //enable the interrupt
 }
 
+int getLeft(void){
+	int result=joystickLeft; //temp variable
+	joystickLeft=0; //reset the read variable back to zero
+	return result; //return the temp variable
+}
 
+int getRight(void){
+	int result=joystickRight; //temp variable
+	joystickRight=0; //Reset the read variable back to zero
+	return result;
+}
+
+int getUp(void){
+	int result=joystickUp; //temp variable
+	joystickUp=0; //Reset the read variable back to zero
+	return result; //return the temp variable
+}
+
+int getDown(void){
+	int result=joystickDown; //temp variable
+	joystickDown=0; //Reset the read variable back to zero
+	return result; //return the temp variable
+}
+
+int getCenter(void){
+	int result=joystickCenter; //Temp variable
+	joystickCenter=0; //Reset the read variable back to zero
+	return result;
+}
+
+/*
+ * interrupt handler for portc
+ * 		handles the actions for joystick left and joystick right
+ */
+void PORTC_IRQHandler(void){
+	if((PORTC->PCR[LEFT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on LEFT pin
+		joystickLeft=1;
+		PORTC->PCR[LEFT] &= ~(0 << 24);  // clear the interrupt for the LEFT pin
+	}
+	if((PORTC->PCR[RIGHT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on RIGHT pin
+		joystickRight=1;
+		PORTC->PCR[RIGHT] &= ~(0 << 24);  // clear the interrupt for the RIGHT pin
+	}
+}
+
+
+/*
+ * interrupt handler for portb
+ * 		handles the actions for joystick up, joystick down and joystick center
+ */
+void PORTB_IRQHandler(void){
+	if((PORTB->PCR[CENTER] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
+		joystickCenter=1;
+		PORTB->PCR[CENTER] &= ~(0 << 24);  //Clear the interrupt for the CENTER pin
+	}
+	if((PORTB->PCR[UP] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on UP pin
+		joystickUp=1;
+		PORTB->PCR[UP] &= ~(0 << 24); //clear the interrupt for the UP pin
+	}
+	if((PORTB->PCR[DOWN] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on DOWN pin
+		joystickDown=1;
+		PORTB->PCR[DOWN] &= ~(0 << 24); //clear the interrupt for the DOWN pin
+	}
+}
 
 

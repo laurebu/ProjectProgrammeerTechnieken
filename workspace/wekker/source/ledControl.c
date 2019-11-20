@@ -3,14 +3,18 @@
  * @file: ledDriver.c
  */
 
-//files to include
+/* * * * * * * * * * *
+ * files to include  *
+ * * * * * * * * * * */
 #include "ledControl.h"
 #include "ledDriver.h"
 #include "MK64F12.h"
 #include <stdio.h>
-/*
- * wait for some time
- */
+
+
+/* * * * * *
+ * methods *
+ * * * * * */
 void delay(long delay) {
 	for (long i = 0; i < delay; i++) {
 	}

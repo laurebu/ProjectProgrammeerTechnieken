@@ -4,26 +4,49 @@
  *
  */
 
-//files to include
+/* * * * * * * * * * *
+ * files to include  *
+ * * * * * * * * * * */
 #include "speakerDriver.h"
 #include "speakercontrol.h"
 #include "main.h"
 #include <stdio.h>
-/*
- * return the current alarm status
- * 0=off
- * 1=on
- */
-int getAlarmStatus(){
-	return getAlarm();
-}
-/*
- * calls the initialize method for the pwm from the speaker driver
- */
-void initSpeaker(void){
-	initPWM();
+
+/* * * * * * *
+ * variables *
+ * * * * * * */
+tunes tune;
+
+/* * * * * *
+ * methods *
+ * * * * * */
+
+int getTuneNr(void){
+	return tune;
 }
 
+char * getTune(int tune){
+	char *str="";
+	switch(tune){
+	case 0:
+		str="standard Alarm";
+		break;
+	case 1:
+		str="Fur Elise";
+		break;
+	case 2:
+		str="MorgenStimmung";
+		break;
+	case 3:
+		str="Octave";
+		break;
+	default:
+		tune=0; //just in case something went wrong
+		str="standard Alarm";
+		break;
+	}
+	return str;
+}
 /*
  * pause in between notes or keep a note going for a while
  */
@@ -43,6 +66,17 @@ void note(int freq, int duration){
 	}
 }
 
+void selectTune(int distance){
+	if (distance<0){
+		if(tune==0){
+			tune=3;
+		}else{
+			tune=(tune+(distance))%3;
+		}
+	}else{
+		tune=(tune+distance)%4;
+	}
+}
 /*
  * plays an standard alarm sound
  */
@@ -64,18 +98,18 @@ void standardAlarmSound(void){
  */
 void Morgenstimmung_EG(void){
 	int delay= 1200000;
-	A5_Fc5_E5_D5_E5_Fc5();
-	A5_Fc5_E5_D5_E5_Fc5();
+	G5_E5_D5_Cn5_D5_E5();
+	G5_E5_D5_Cn5_D5_E5();
+	note(G5,delay);
+	note(E5,delay);
+	note(G5,delay);
 	note(A5,delay);
-	note(Fc5,delay);
+	note(E5,delay);
 	note(A5,delay);
-	note(B5,delay);
-	note(Fc5,delay);
-	note(B5,delay);
-	note(A5,delay);
-	note(Fc5,delay);
+	note(G5,delay);
 	note(E5,delay);
 	note(D5,delay);
+	note(Cn5,delay);
 	pause(delay);
 	pause(delay);
 	stopNote();
@@ -104,10 +138,10 @@ void furElise_LvB(void){
 	Gc3_E4_C5_B4_A4();
 	note(A3,delay);
 	note(B4,delay);
-	note(C5,delay);
+	note(Cn5,delay);
 	note(D5,delay);
 	note(E5,delay*2);
-	note(C4,delay);
+	note(Cn4,delay);
 	note(G4,delay);
 	note(F5,delay);
 	note(E5,delay);
@@ -116,11 +150,11 @@ void furElise_LvB(void){
 	note(F4,delay);
 	note(E5,delay);
 	note(D5,delay);
-	note(C5,delay*2);
+	note(Cn5,delay*2);
 	note(A3,delay);
 	note(E4,delay);
 	note(D5,delay);
-	note(C5,delay);
+	note(Cn5,delay);
 	note(B4,delay*2);
 	note(E4,delay*2);
 	stopNote();
@@ -145,21 +179,21 @@ void furElise_LvB(void){
  */
 void octave(){
 	int delay=850000;
-	note(C4,delay);
+	note(Cn4,delay);
 	note(D4,delay);
 	note(E4,delay);
 	note(F4,delay);
 	note(G4,delay);
 	note(A4,delay);
 	note(B4,delay);
-	note(C5,delay);
+	note(Cn5,delay);
 	note(B4,delay);
 	note(A4,delay);
 	note(G4,delay);
 	note(F4,delay);
 	note(E4,delay);
 	note(D4,delay);
-	note(C4,0);
+	note(Cn4,0);
 }
 
 /*
@@ -185,7 +219,7 @@ void Gc3_E4_Gc4_B4_C5_A3_E4(void){
 	note(E4,delay);
 	note(Gc4,delay);
 	note(B4,delay);
-	note(C5,delay*2);
+	note(Cn5,delay*2);
 	note(E3,delay);
 	note(A3,delay);
 	note(E4,delay);
@@ -198,7 +232,7 @@ void Gc3_E4_C5_B4_A4(void){
 	int delay=500000;
 	note(Gc3,delay);
 	note(E4,delay);
-	note(C5,delay);
+	note(Cn5,delay);
 	note(B4,delay);
 	note(A4,delay*2);
 }
@@ -208,24 +242,10 @@ void Gc3_E4_C5_B4_A4(void){
 void A3_C4_E4_A4_B4(void){
 	int delay=500000;
 	note(A3,delay);
-	note(C4,delay);
+	note(Cn4,delay);
 	note(E4,delay);
 	note(A4,delay);
 	note(B4,delay*2);
-}
-
-/*
- * plays a note sequence (A5_Fc5_E5_D5_E5_Fc5)
- */
-void A5_Fc5_E5_D5_E5_Fc5(void){
-	int delay= 1200000;
-	note(A5,delay);
-	note(Fc5,delay);
-	note(E5,delay);
-	note(D5,delay);
-	note(E5,delay);
-	note(Fc5,delay);
-	stopNote();
 }
 
 /*
@@ -240,7 +260,7 @@ void E5_Dc5_E5_Dc5_E5_B4_D5_C5_A4(void){
 	note(E5,delay);
 	note(B4,delay);
 	note(D5,delay);
-	note(C5,delay);
+	note(Cn5,delay);
 	note(A4,delay*2);
 }
 
@@ -265,3 +285,14 @@ void playMusic(int nr){
 			break;
 	}
 }
+
+void G5_E5_D5_Cn5_D5_E5(){
+	int delay= 1200000;
+	note(G5,delay);
+	note(E5,delay);
+	note(D5,delay);
+	note(Cn5,delay);
+	note(D5,delay);
+	note(E5,delay);
+	stopNote();
+};

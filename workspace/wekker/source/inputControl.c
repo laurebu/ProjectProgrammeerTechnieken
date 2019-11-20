@@ -3,16 +3,18 @@
  * @file: inputControl.c
  */
 
-//files to include
+/* * * * * * * * * * *
+ * files to include  *
+ * * * * * * * * * * */
 #include "inputControl.h"
 #include <stdio.h>
 #include "joystickDriver.h"
-#include "buttonDriver.h"
 #include "MK64F12.h"
 #include "main.h"
 
-//variables
-tunes tune;
+/* * * * * * *
+ * variables *
+ * * * * * * */
 timeParts timePart;
 changeState selectState;
 alarmParts alarmPart;
@@ -23,84 +25,45 @@ int hour_alarm=0;
 int min_alarm=0;
 int sec_alarm=0;
 
-int disp=0;
-
-/*
- * initialises used enums to their standard values
- */
+/* * * * * *
+ * methods *
+ * * * * * */
 void initEnums(void){
 	timePart=0;
 	selectState=0;
-	tune=1;
 	alarmPart=0;
 }
 
-/*
- * returns the number of the currently selected tune
- */
-int getTuneNr(void){
-	return tune;
-}
-
-/*
- * returns disp which indicates whether or not something has to be displayed
- */
-int getDisplay(void){
-	return disp;
-}
-
-/*
- * returns the hour from the state set time
- */
 int getHour(void){
 	return hour_time;
 }
 
-/*
- * returns min from the state set time
- */
 int getMin(void){
 	return min_time;
 }
 
-/*
- * returns sec from the state set time
- */
 int getSec(void){
 	return sec_time;
 }
 
-/*
- * returns the hour from the state set alarm
- */
+
 int getHourAlarm(void){
 	return hour_alarm;
 }
 
-/*
- * returns the min from te state set alarm
- */
 int getMinAlarm(void){
 	return min_alarm;
 }
 
-/*
- * returns the sec from the state set alarm
- */
+
 int getSecAlarm(void){
 	return sec_alarm;
 }
 
-/*
- * returns the number of the selected setting
- */
 int getSettingNr(void){
 	return selectState;
 }
 
-/*
- * returns the string to be displayed when choosing to change a setting
- */
 char * getSetting(int setting){
 	char *str="";
 	switch(setting){
@@ -124,35 +87,8 @@ char * getSetting(int setting){
 	return str;
 }
 
-/*
- * returns the string to be displayed when choosing to change a setting
- */
-char * getTune(int tune){
-	char *str="";
-	switch(tune){
-	case 0:
-		str="standard Alarm";
-		break;
-	case 1:
-		str="Für Elise (L. v. Beethoven)";
-		break;
-	case 2:
-		str="MorgenStimmung (E. Grieg)";
-		break;
-	case 3:
-		str="Octave";
-		break;
-	default:
-		tune=0; //just in case something went wrong
-		str="standard Alarm";
-		break;
-	}
-	return str;
-}
 
-/*
- * increment the hour, min or sec when setting the time
- */
+
 void incrementTime(int hour_timeMinSec){
 	switch(hour_timeMinSec){
 		case 0: //increment hour_time
@@ -182,10 +118,6 @@ void incrementTime(int hour_timeMinSec){
 	}
 }
 
-
-/*
- * decrement the hour,min or sec when setting the time
- */
 void decrementTime(int hour_timeMinSec){
 	switch(hour_timeMinSec){
 			case 0: //decrement hour_time
@@ -215,9 +147,6 @@ void decrementTime(int hour_timeMinSec){
 		}
 }
 
-/*
- * increment the hour, min or sec when setting the alarm
- */
 void incrementAlarm(int alarm_hms){
 	switch(alarm_hms){
 		case 0: //increment hour_alarm
@@ -247,9 +176,6 @@ void incrementAlarm(int alarm_hms){
 	}
 }
 
-/*
- * decrement the hour,min or sec when setting the alarm
- */
 void decrementAlarm(int alarm_hms){
 	switch(alarm_hms){
 			case 0: //decrement hour_alarm
@@ -279,207 +205,98 @@ void decrementAlarm(int alarm_hms){
 		}
 }
 
-/*
- * set the variable disp which indicates whether or not something has to be displayed
- */
-void setDisplay(int displayOrNot){
-	disp=displayOrNot;
-}
 
-/*
- * interrupt handler for portc
- * 		handles the actions for joystick left and joystick right
- */
-void PORTC_IRQHandler(void){
-	switch(getState()){
-			case 0: //STANDARD
-				//joystick left
-				if((PORTC->PCR[LEFT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on left pin
-					if (selectState==0){ //go to the previous option
-						selectState=3;
-					}
-					else{
-				        selectState = (selectState-1) % 4;
-				    }
-					setDisplay(2); //indicate that something has changed and needs to be displayed
-					PORTC->PCR[LEFT] &= ~(0 << 24); //clear the interrupt for the left pin
-				}
-				//joystick right
-				if((PORTC->PCR[RIGHT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on right pin
-					selectState=(selectState+1)%4; //go to the next option
-					setDisplay(2); //indicate that something has changed and needs to be displayed
-					PORTC->PCR[RIGHT] &= ~(0 << 24); //clear the interrupt for the right pin
-
-					//TODO: show the selected option
-						//=>getSetting(selectState) via de disp
-				}
-				break;
-			case 1: //SETTIME
-				//joystick left
-				if((PORTC->PCR[LEFT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){//check if interrupt was called on left pin
-					if (timePart==0){ //go to the previous option
-						timePart=2;
-					}
-					else{
-						timePart = (timePart-1) % 3;
-					}
-					PORTC->PCR[LEFT] &= ~(0 << 24); //clear the interrupt for the left pin
-				}
-				//joystick right
-				if((PORTC->PCR[RIGHT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on right pin
-					timePart=(timePart+1)%3; //go to the next option
-					PORTC->PCR[RIGHT] &= ~(0 << 24); //clear the interrupt for the right pin
-				}
-				break;
-			case 2: //SETALARM
-				//joystick left
-				if((PORTC->PCR[LEFT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){//check if interrupt was called on left pin
-					if (alarmPart==0){ //go to the previous option
-						alarmPart=2;
-					}else{
-						alarmPart = (alarmPart-1) % 3;
-					}
-					PORTC->PCR[LEFT] &= ~(0 << 24); //clear the interrupt for the left pin
-				}
-				//joystick right
-				if((PORTC->PCR[RIGHT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on right pin
-					alarmPart=(alarmPart+1)%3; //go to the next option
-					PORTC->PCR[RIGHT] &= ~(0 << 24); //clear the interrupt for the right pin
-				}
-				break;
-			case 3: //SETMUSIC
-				//joystick left
-				if((PORTC->PCR[LEFT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on left pin
-					if (tune==0){ //go to the previous option
-						tune=3;
-					}else{
-						tune = (tune-1) % 3;
-					}
-					setDisplay(1);
-					PORTC->PCR[LEFT] &= ~(0 << 24); //clear the interrupt for the left pin
-				}
-				//joystick right
-				if((PORTC->PCR[RIGHT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on right pin
-					tune=(tune+1)%4; //Set next tune
-					setDisplay(1);
-					PORTC->PCR[RIGHT] &= ~(0 << 24); //clear the interrupt for the right pin
-				}
-				break;
-			case 4: //ALARM
-				//joystick left or right ==> do nothing and clear the interrupts
-				if(((PORTC->PCR[LEFT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24) || ((PORTC->PCR[RIGHT] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24)){
-					PORTC->PCR[LEFT] &= ~(0 << 24); //clear the interrupt for the left pin
-					PORTC->PCR[RIGHT] &= ~(0 << 24); //clear the interrupt for the right pin
-				}
-				break;
-			default:
-				//do nothing, clr interrupts and go back to standard, just in case something happened
-				PORTC->PCR[LEFT] &= ~(0 << 24); //clear the interrupt for the left pin
-				PORTC->PCR[RIGHT] &= ~(0 << 24); //clear the interrupt for the right pin
-				setState(0);
-				break;
+int checkInterruptLeft(void){
+	if(getLeft()==1){//if interrupt on left joystick pin
+		if(getState()==0){ //while in STANDARD state
+			//select previous setting
+			if(selectState==0){
+				selectState=3;
+			}else{
+				selectState=(selectState-1)%3;
+			}
 		}
-
+		if(getState()==1){// while in SET TIME state
+			//select previous from hour, min, sec (_time)
+			if(timePart==0){
+				timePart=2;
+			}else{
+				timePart=(timePart-1)%2;
+			}
+		}
+		if(getState()==2){// while in SET ALARM state
+			//select previous from hour, min, sec (_alarm)
+			if(alarmPart==0){
+				alarmPart=2;
+			}else{
+				alarmPart=(alarmPart-1)%2;
+			}
+		}
+		return 1;
+	}else{
+		return 0;
+	}
 }
 
-/*
- * interrupt handler for portb
- * 		handles the actions for joystick up, joystick down and joystick center
- */
-void PORTB_IRQHandler(void){
-	switch(getState()){
-		case 0: //STANDARD
-			if((PORTB->PCR[CENTER] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
-				setState((int)selectState); //go to the selected state
-				setDisplay(1);
-				PORTB->PCR[CENTER] &= ~(0 << 24);  //Clear the interrupt for the CENTER pin
-			}
-			//nothing needs to happen here for the up and down pins so just clear the interrupts
-			if(((PORTB->PCR[UP] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24) || ((PORTB->PCR[DOWN] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24)){
-				PORTB->PCR[UP] &= ~(0 << 24);  // clear the interrupt for the up pin
-				PORTB->PCR[DOWN] &= ~(0 << 24); //clear the interrupt for the down pin
-			}
-			break;
-		case 1: //SETTIME
-			//joystick center
-			if((PORTB->PCR[CENTER] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
-				setState(0); //0==STANDARD state
-				timePart=0; //Set back to hour_time
-				setDisplay(1);
-				PORTB->PCR[CENTER] &= ~(0 << 24);  //Clear the interrupt for the CENTER pin
-			}
-			//joystick down
-			if((PORTB->PCR[DOWN] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on DOWN pin
-				decrementTime(timePart); //decrement hour, min or sec
-				setDisplay(1); //indicate that the time has changed and needs to be displayed again
-				PORTB->PCR[DOWN] &= ~(0 << 24); //clear the interrupt for the DOWN pin
-			}
-			//joystick up
-			if((PORTB->PCR[UP] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on up pin
-				incrementTime(timePart); //increment hour, min or sec
-				setDisplay(1); //indicate that the time has changed and needs to be displayed again
-				PORTB->PCR[UP] &= ~(0 << 24);  //clear the interrupt for the UP pin
-			}
-			break;
-		case 2: //SETALARM
-			//joystick center
-			if((PORTB->PCR[CENTER] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
-				setState(0); //0==STANDARD state
-				timePart=0; //Set back to hour_time
-				setDisplay(1);
-				PORTB->PCR[CENTER] &= ~(0 << 24);  //Clear the interrupt for the center pin
-			}
-			//joystick down
-			if((PORTB->PCR[DOWN] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
-				decrementAlarm(alarmPart); //decrement hour, min or sec of the alarm
-				setDisplay(1); //indicate that the alarm time has changed and needs to be displayed again
-				PORTB->PCR[DOWN] &= ~(0 << 24);//clear the interrupt for the DOWN pin
-			}
-			//joystick up
-			if((PORTB->PCR[UP] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on up pin
-				incrementAlarm(alarmPart); //increment hour, min or sec of the alarm
-				setDisplay(1); //indicate that the alarm time has changed and needs to be displayed again
-				PORTB->PCR[UP] &= ~(0 << 24);  //clear the interrupt for the UP pin
-			}
-			break;
-		case 3: //SETMUSIC
-			//joystick center
-			if((PORTB->PCR[CENTER] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
-				setState(0); //0==STANDARD state
-				setDisplay(1);
-				PORTB->PCR[CENTER] &= ~(0 << 24);  //Clear the interrupt for the center pin
-			}
-			//joystick up
-			if((PORTB->PCR[UP] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on UP pin
-				PORTB->PCR[UP] &= ~(0 << 24);  //Clear the interrupt for the up pin
-			}
-			//joystick down
-			if((PORTB->PCR[DOWN] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on DOWN pin
-				PORTB->PCR[DOWN] &= ~(0 << 24);  //Clear the interrupt for the down pin
-			}
-			break;
-		case 4: //ALARM
-			//TODO: implement this
-			//joystick center
-			if((PORTB->PCR[CENTER] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on CENTER pin
-				setAlarm(0);
-				setState(0); //0==STANDARD state
-				setDisplay(1);
-				PORTB->PCR[CENTER] &= ~(0 << 24);  //Clear the interrupt for the center pin
-			}
-			//joystick up
-			if((PORTB->PCR[UP] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on UP pin
-				PORTB->PCR[UP] &= ~(0 << 24);  //Clear the interrupt for the up pin
-			}
-			//joystick down
-			if((PORTB->PCR[DOWN] & INTERRUPT_MASK_24)==INTERRUPT_MASK_24){ //check if interrupt was called on DOWN pin
-				PORTB->PCR[DOWN] &= ~(0 << 24);  //Clear the interrupt for the down pin
-			}
-			break;
-		default:
-			setState(0); //go to standard state, just in case something went wrong
-			setDisplay(1);
-			//TODO:clr the interrupts
-			break;
+int checkInterruptRight(void){
+	if(getRight()==1){ //if interrupt on right joystick pin
+		if(getState()==0){
+			//select next setting
+			selectState=(selectState+1)%4;
+		}
+		if(getState()==1){ //while in SET TIME state
+			//select next from hour, min, sec (_time)
+			timePart=(timePart+1)%3;
+		}
+		if(getState()==2){ //while in setalarm state
+			//select next from hour, min, sec (_alarm)
+			alarmPart=(alarmPart+1)%3;
+		}
+		return 1;
+		}else{
+			return 0;
+		}
+}
+
+int checkInterruptUp(void){
+	if(getUp()==1){ //if interrupt on up joystick pin
+		if(getState()==1){ // while in SET TIME state
+			//increment the hour,min,sec of the time to set
+			incrementTime(timePart);
+		}
+		if(getState()==2){ //while in SET ALARM state
+			//increment the hour,min,sec of the alarm to set
+			incrementAlarm(alarmPart);
+		}
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int checkInterruptDown(void){
+	if(getDown()==1){ //if interrupt on down joystick  pin
+		if(getState()==1){ //while in SET TIME state
+			//decrement the hour,min,sec of the time to set
+			decrementTime(timePart);
+		}
+		if(getState()==2){ //while in SET ALARM state
+			//decrement the hour,min,sec of the alarm to set
+			decrementAlarm(alarmPart);
+		}
+		return 1;
+	}else{
+		return 0;
+	}
+}
+
+int checkInterruptCenter(void){
+	if(getCenter()==1){ //if interrupt on center joystick pin
+		if(getState()==4){ //while in alarmstate
+			setAlarm(0); //alarm on
+		}
+		return 1;
+	}else{
+		return 0;
 	}
 }
