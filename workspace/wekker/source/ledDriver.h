@@ -2,7 +2,7 @@
  * @author: Lander Buysse
  * @file: ledDriver.h
  *
- * @description: .h file for the led driver, contains:
+ * description: .h file for the led driver, contains:
  * 						constants for the LED's GPIO pins for the frdm-k64f and the application shield
  * 						method prototypes to initialise, turn on and turn off a led
  */

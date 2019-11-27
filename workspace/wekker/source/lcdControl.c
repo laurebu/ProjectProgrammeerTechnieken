@@ -222,6 +222,21 @@ void display_time_center(int hours, int minutes, int seconds){
 	}
 }
 
+void display_date_leftbottom(char* weekday, int day, char* month, int year){
+	clear_line(3);
+	put_string_pos(weekday,0,24);
+	if(day <= 9){
+		put_int(0,24,24);
+		put_int(day,30,24);
+	}
+	else {
+		put_int(day,24,24);
+	}
+	put_string_pos(month,40,24);
+	put_int(year,62,24);
+
+}
+
 void display_time_current(int hours, int minutes, int seconds){
 	clear_lcd();
 	put_string_pos("Current time: ",0,0);
@@ -240,8 +255,16 @@ void display_time_time(int hours, int minutes,int seconds){
 	display_time_center(hours, minutes, seconds);
 }
 
-void center_text(char* str, int lengthstr){
+int get_string_length(char *s) {
+   int c = 0;
+   while(s[c] != '\0')
+      c++;
+   return c;
+}
+
+void center_text(char* str){
 	clear_line(2);
+	int lengthstr = get_string_length(str);
 	int ypos = 16;
 
 	/* Calculate the (start) x-position based on the length of the string */
@@ -251,19 +274,89 @@ void center_text(char* str, int lengthstr){
 	put_string_pos(str, xpos, ypos);
 }
 
-void display_music(char* str, int lengthstr){
+void display_music(char* str){
 	clear_lcd();
 	put_string_pos("Current alarm tone: ",0,0);
-	center_text(str, lengthstr);
+	center_text(str);
 }
 
-void display_menu(char* str, int length, int hours, int minutes, int seconds){
+void display_menu(char* str, int hours, int minutes, int seconds){
 	clear_lcd();
 	/* Display current time in the left top corner */
 	display_time_lefttop(hours, minutes, seconds);
 
 	/* Display the current menu item in the middle */
-	center_text(str, length);
+	center_text(str);
+}
+
+void center_date(int d, int m, int y){
+	clear_line(2);
+
+	if(d <= 9){
+		put_int(0,30,16);
+		put_int(d,36,16);
+		put_string(" ");
+	}
+	else {
+		put_int(d,30,16);
+		put_string(" ");
+	}
+
+	put_string_pos(getMonthName(m),48,16);
+	put_string(" ");
+
+	put_int(y,72,16);
+}
+
+char* getMonthName(int m){
+	char *str="";
+	switch(m){
+		case 1: //january
+			str="jan";
+			break;
+		case 2: //february
+			str="feb";
+			break;
+		case 3: //march
+			str="mar";
+			break;
+		case 4: //april
+			str="apr";
+			break;
+		case 5: //may
+			str="may";
+			break;
+		case 6: //june
+			str="jun";
+			break;
+		case 7: //july
+			str="jul";
+			break;
+		case 8: //august
+			str="aug";
+			break;
+		case 9: //september
+			str="sep";
+			break;
+		case 10: //october
+			str="oct";
+			break;
+		case 11: //november
+			str="nov";
+			break;
+		case 12: //december
+			str="dec";
+			break;
+		default:
+			break;
+	}
+	return str;
+}
+
+void display_date(int d, int m, int y){
+	clear_lcd();
+	put_string_pos("New date set for: ",0,0);
+	center_date(d, m, y);
 }
 
 void display_alarm_onOff(int onOff){

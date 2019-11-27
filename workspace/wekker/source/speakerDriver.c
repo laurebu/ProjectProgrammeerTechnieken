@@ -1,14 +1,18 @@
 /*
  * @author: Lander Buysse
  * @file: speakerDriver.c
+ *
+ * description: .c file for the speaker driver
+ * 					constants for the frequencies of some notes
+ * 					contains methods to initialize the speaker, play and stop a note
  */
 
 /* * * * * * * * * * *
  * files to include  *
  * * * * * * * * * * */
-#include <stdio.h>
-#include "MK64F12.h"
-#include "speakerDriver.h"
+	#include <stdio.h>
+	#include "MK64F12.h"
+	#include "speakerDriver.h"
 
 /* * * * * *
  * methods *
@@ -30,7 +34,7 @@
 	void initPWM(void){
 		SIM->SCGC6 = SIM_SCGC6_FTM0_MASK;   //enable the FTM0 clock
 		SIM->SCGC5 = SIM_SCGC5_PORTC_MASK;  //enable the portc clock
-		PORTC->PCR[2] = PORT_PCR_MUX(4);    //configure as alternative
+		PORTC->PCR[2] = PORT_PCR_MUX(4);    //configure as alternative 4
 	}
 
 

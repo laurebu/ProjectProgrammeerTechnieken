@@ -1,6 +1,10 @@
 /*
  * @author: Lander Buysse
  * @file: speakerDriver.h
+ *
+ * description: .h file for the speaker driver
+ * 					constants for the frequencies of some notes
+ * 					contains methods prototypes to initialize the speaker, play and stop a note
  */
 #ifndef SPEAKERDRIVER_H
 #define SPEAKERDRIVER_H

@@ -12,15 +12,14 @@
  * prototypes  *
  * * * * * * * */
 
-
-/*
- * Function : init
- * ---------------
- *  Summary:
- * --------
- * 		this function initialises the drivers by calling the necessary initialise methods from the drivers
- */
-void init(void);
+	/*
+	 * Function : init
+	 * ---------------
+	 *  Summary:
+	 * --------
+	 * 		this function initialises the drivers by calling the necessary initialise methods from the drivers
+	 */
+	void init(void);
 
 #endif //HARDWAREINIT_H
 

@@ -28,16 +28,16 @@ int getTuneNr(void){
 char * getTune(int tune){
 	char *str="";
 	switch(tune){
-	case 0:
+	case STANDARDALARM:
 		str="standard Alarm";
 		break;
-	case 1:
+	case FURELISE:
 		str="Fur Elise";
 		break;
-	case 2:
+	case MORGENSTIMMUNG:
 		str="MorgenStimmung";
 		break;
-	case 3:
+	case OCTAVE:
 		str="Octave";
 		break;
 	default:
@@ -56,9 +56,6 @@ void pause(int loops){
 	}
 }
 
-/*
- * play and note for a specified duration
- */
 void note(int freq, int duration){
 	if(getAlarm()==1){
 		playNote(freq);

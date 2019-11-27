@@ -9,27 +9,27 @@
 /* * * * * * * * * * *
  * files to include  *
  * * * * * * * * * * */
-#include "speakerDriver.h"
-#include "ledDriver.h"
-#include "joystickDriver.h"
-#include "lcdDriver.h"
-#include <stdio.h>
-#include "timerDriver.h"
+	#include "speakerDriver.h"
+	#include "ledDriver.h"
+	#include "joystickDriver.h"
+	#include "lcdDriver.h"
+	#include <stdio.h>
+	#include "timerDriver.h"
 
 /* * * * * *
  * methods *
  * * * * * */
-void init(void){
-	initPWM(); //initialises the PWM for the speaker
+	void init(void){
+		initPWM(); //initialises the PWM for the speaker
 
-	//initialise the required leds
-	initialiseLed(BLUE_FRDM);
+		//initialise the required leds
+		initialiseLed(BLUE_FRDM);
 
-	initialiseLed(RED_AP);
+		initialiseLed(RED_AP);
 
-	joystickInit(); //initialises the joystick
+		joystickInit(); //initialises the joystick
 
-	lcd_init();//initialises the lcd screen
+		lcd_init();//initialises the lcd screen
 
-	init_timer();//initialises the time
-}
+		init_timer();//initialises the time
+	}
