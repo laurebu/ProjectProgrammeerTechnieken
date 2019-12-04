@@ -2,7 +2,7 @@
  * @author: Lander Buysse
  * @file: inputControl.h
  *
- *description: .h file for the input control
+ * description: .h file for the input control
  * 				contains:
  * 					enum definitions for the states, and parts of the time/alarm
  * 					prototypes for getters and setters to be used in the main method
@@ -86,7 +86,6 @@
 	 */
 	int getHour(void);
 
-
 	/*
 	 * Function: getMin
 	 * ----------------
@@ -137,8 +136,6 @@
 	 */
 	int getMinAlarm(void);
 
-
-
 	/*
 	 * Function: getSettingNr
 	 * ----------------------
@@ -148,8 +145,6 @@
 	 * 			(returns an integer in between 0 and nr of settings-1
 	 */
 	int getSettingNr(void);
-
-
 
 	/*
 	 * Function: getSetting
@@ -393,6 +388,5 @@
 	 * 		decrements the days, months, years of the day to set
 	 */
 	void decrementDate(int dmy);
-
 
 #endif //INPUTCONTROL_H

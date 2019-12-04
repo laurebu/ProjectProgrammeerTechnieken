@@ -1,8 +1,8 @@
 /*
- * @author: Lander Buysse
+ * @author: Lander Buysse & Laure Buysse
  * @file: hardwareInit.h
  *
- *description: .h file for the initialization of hardware components, contains:
+ * description: .h file for the initialization of hardware components, contains:
  * 						method prototype to call the initialize methods from the drivers (led,lcd,joystick,speaker,timer)
  */
 #ifndef HARDWAREINIT_H

@@ -1,79 +1,109 @@
 /*
  * @author: Laure Buysse
  * @file: lcdDriver.c
+ * 
+ * description: .c file for the lcd driver
+ *              contains:
+ *                  functions for communication to the lcd (through spi)
+ *                  delay functions
+ *                  functions to initialise the lcd and/or needed pins
+ *                  functions to clear (parts of) the lcd
  */
 
-/*
- * files to
- */
+/* * * * * * * * * * *
+ * files to include  *
+ * * * * * * * * * * */
 #include "lcdDriver.h"
-
 #include <stdio.h>
 #include "MK64F12.h"
 #include <stdlib.h>
 
-
-
+/* * * * * * *
+ * variables *
+ * * * * * * */
 uint8_t yposition = 0;
 uint8_t xposition = 0;
 
-/*
- * delay function in ms
- */
+
+/* * * * * *
+ * methods *
+ * * * * * */
+// delay in ms
 void delay_ms(int ms) {
 	for (long i = 0; i < (1700 * ms); i++) {}
 }
 
-/*
- * delay function in us
- */
+// dealy in us
 void delay_us(int us) {
 	for (long i = 0; i < (int)(1.7 * us); i++) {}
 }
 
-/*
- * TODO: add documentation
- */
 void spi_write(uint8_t command){
 	GPIOD->PDOR &= ~(1 << nCS); 			// chip select low
 
 	for(int n=8; n>0; n--){
-		GPIOD->PDOR &= ~(1 << SCK);		// clock low
-		if(command & (1<<(n-1))){		// if current bit is '1'
-			GPIOD->PDOR |= (1 << MOSI);	// set data pin high
+		GPIOD->PDOR &= ~(1 << SCK);			// clock low
+		if(command & (1<<(n-1))){			// if current bit is '1'
+			GPIOD->PDOR |= (1 << MOSI);		// set data pin high
 		} else {
 			GPIOD->PDOR &= ~(1 << MOSI);	// set data pin low
 		}
-		delay_us(1);					// wait a bit
-		GPIOD->PDOR |= (1 << SCK); 		// clock high
+		delay_us(1);						// wait a bit
+		GPIOD->PDOR |= (1 << SCK); 			// clock high
 		delay_us(1);
 	}
 
-	GPIOD->PDOR |= (1 << nCS); 			// chip select high
+	GPIOD->PDOR |= (1 << nCS); 				// chip select high
 	delay_us(5);
 }
 
-/*
- * TODO: add documentation
- */
 void lcd_data(uint8_t data) //Data Output Serial Interface
 {
 	GPIOC->PDOR |= (1 << A0);			// use data mode
 	spi_write(data);
 }
 
-/*
- * TODO: add documentation
- */
 void lcd_comm(uint8_t command) //Command Output Serial Interface
 {
 	GPIOC->PDOR &= ~(1 << A0);			// use command mode
 	spi_write(command);
 }
 
-/*
- * TODO: add documentation
- */
+void clear_line(int line){
+	lcd_comm(0x00);		// send command column nibble high
+	lcd_comm(0x10);		// send command column nibble low	
+	char page;
+	switch(line){
+		case 0:
+			page=0xB0;	// page 0
+			break;
+		case 1:
+			page=0xB1;	// page 1
+			break;
+		case 2:
+			page=0xB2;	// page 2
+			break;
+		case 3:
+			page=0xB3;	// page 3
+			break;
+		default:
+			page=0xB0;	// page 0
+			break;
+	}
+	lcd_comm(page);		// send command page	
+
+	for(int i=0; i<128; i++){
+		lcd_data(0x00);	// send data (zeros) for the entire page (0x00 for 128 columns)
+	}
+}
+
+void clear_lcd(){
+	clear_line(0);
+	clear_line(1);
+	clear_line(2);
+	clear_line(3);
+}
+
 void pins_init()
 {
 	//enable all necessary ports for the LCD
@@ -92,64 +122,22 @@ void pins_init()
 	GPIOD->PDDR |= (1 << MOSI);
 	GPIOD->PDDR |= (1 << RESET);
 	GPIOC->PDDR |= (1 << A0);
-
 }
 
-/*
- * TODO: add documentation
- */
-void clear_lcd(){
-	clear_line(0);
-	clear_line(1);
-	clear_line(2);
-	clear_line(3);
-}
-
-void clear_line(int line){
-	lcd_comm(0x00);
-	lcd_comm(0x10);
-	char page;
-	switch(line){
-		case 0:
-			page=0xB0;
-			break;
-		case 1:
-			page=0xB1;
-			break;
-		case 2:
-			page=0xB2;
-			break;
-		case 3:
-			page=0xB3;
-			break;
-		default:
-			page=0xB0;
-			break;
-	}
-	lcd_comm(page);
-
-	for(int i=0; i<128; i++){
-		lcd_data(0x00);
-	}
-}
-
-/*
- * TODO: add documentation
- */
 void lcd_init(){
-	/* Init pins */
+	// Init pins 
 	pins_init();
 
-	/* Reset lcd */
+	// Reset lcd 
 	GPIOD->PDOR &= ~(1 << RESET);		//send reset pulse
-	delay_ms(50);					//wait
+	delay_ms(50);						//wait
 	GPIOD->PDOR |= (1 << RESET); 		//stop reset
 
-	/* Set start value chip select and clock */
+	// Set start value chip select and clock 
 	GPIOD->PDOR |= (1 << RESET);		//set chip select to inactive
-	GPIOD->PDOR |= (1 << SCK);		//set clock to inactive
+	GPIOD->PDOR |= (1 << SCK);			//set clock to inactive
 
-	/* Init commands for lcd */
+	// Init commands for lcd 
 	lcd_comm(0xAE);
 	lcd_comm(0xA2);
 	lcd_comm(0xA0);
@@ -162,7 +150,7 @@ void lcd_init(){
 	lcd_comm(0x17);
 	lcd_comm(0xA6);
 
-	/* Clear screen*/
+	// Clear screen
 	clear_lcd();
 
 	// Set beginning position

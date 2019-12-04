@@ -302,7 +302,6 @@ void setTimeBit(int t){
 	set_timebit(t);
 }
 
-//TODO: split in functions
 void set_date(int d, int m, int y){
 	// Calculate days in between current day and new date
 	// No change between dates

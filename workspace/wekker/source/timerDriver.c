@@ -39,7 +39,6 @@ void PIT0_IRQHandler(void){
 	timebit = 1;
 	secondsTotal += 1;
 	PIT->CHANNEL[0].TFLG |= (1 << 0);
-
 }
 
 int get_seconds_total(){

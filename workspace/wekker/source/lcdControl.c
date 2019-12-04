@@ -1,16 +1,28 @@
 /*
  * @author: Laure Buysse
  * @file: lcdControl.c
+ * 
+ * description: .c file for the lcd control
+ *              contains:
+ *                  constant definition for the array containing the font of the letters for the lcd
+ *                  methods to put characters, strings, int on the lcd
+ *                  methods to display certain menus/layouts on the lcd 
+ *                  method to get the name of a month based on the number of a month
+ *                  method to get the length of a string
  */
 
-//files to include
+/* * * * * * * * * * *
+ * files to include  *
+ * * * * * * * * * * */
 #include "lcdControl.h"
 #include "lcdDriver.h"
-
 #include <stdio.h>
 #include "MK64F12.h"
 #include <stdlib.h>
 
+/* * * * * * *
+ * constants *
+ * * * * * * */
 const unsigned char font [96][6] = {
 		{0x00,0x00,0x00,0xFF,0x00,0xFF}, //
 		{0x2f,0x00,0xFF,0x00,0xFF,0x00}, // !
@@ -110,6 +122,9 @@ const unsigned char font [96][6] = {
 		{0x00,0x00,0x00,0x00,0xFF,0xFF}
 };
 
+/* * * * * *
+ * methods *
+ * * * * * */
 void put_character(unsigned char character){
 	// Get the current position
 	uint8_t xpos = get_xpos();
@@ -133,7 +148,6 @@ void put_character(unsigned char character){
 				lcd_data(font[character][i]);			// Write data to display
 				xpos++;							// Go to next x-position
 			}
-
 		}
 	}
 	else{
@@ -158,154 +172,6 @@ void put_int(int integer,uint8_t x,uint8_t y){
 	char str[20];
 	sprintf(str, "%d", integer);	//convert integer to string
 	put_string(str);			//print string
-}
-
-void display_time_lefttop(int hours, int minutes, int seconds){
-	clear_line(0);
-	if(hours < 10 ){
-		put_int(0,0,0);
-		put_int(hours,8,0);
-	}
-	else {
-		put_int(hours,0,0);
-	}
-
-	put_string(" : ");
-
-	if(minutes < 10){
-		put_int(0,18,0);
-		put_int(minutes,26,0);
-	}
-	else {
-		put_int(minutes,18,0);
-	}
-
-	put_string(" : ");
-
-	if(seconds < 10){
-		put_int(0,38,0);
-		put_int(seconds,46,0);
-	}
-	else {
-		put_int(seconds,38,0);
-	}
-}
-
-void display_time_center(int hours, int minutes, int seconds){
-	clear_line(2);
-	if(hours < 10 ){
-		put_int(0,40,16);
-		put_int(hours,48,16);
-	}
-	else {
-		put_int(hours,40,16);
-	}
-
-	put_string(" : ");
-
-	if(minutes < 10){
-		put_int(0,58,16);
-		put_int(minutes,66,16);
-	}
-	else {
-		put_int(minutes,58,16);
-	}
-
-	put_string(" : ");
-
-	if(seconds < 10){
-		put_int(0,78,16);
-		put_int(seconds,84,16);
-	}
-	else {
-		put_int(seconds,78,16);
-	}
-}
-
-void display_date_leftbottom(char* weekday, int day, char* month, int year){
-	clear_line(3);
-	put_string_pos(weekday,0,24);
-	if(day <= 9){
-		put_int(0,24,24);
-		put_int(day,30,24);
-	}
-	else {
-		put_int(day,24,24);
-	}
-	put_string_pos(month,40,24);
-	put_int(year,62,24);
-
-}
-
-void display_time_current(int hours, int minutes, int seconds){
-	clear_lcd();
-	put_string_pos("Current time: ",0,0);
-	display_time_center(hours, minutes, seconds);
-}
-
-void display_time_alarm(int hours, int minutes, int seconds){
-	clear_lcd();
-	put_string_pos("Alarm time set for: ",0,0);
-	display_time_center(hours, minutes, seconds);
-}
-
-void display_time_time(int hours, int minutes,int seconds){
-	clear_lcd();
-	put_string_pos("new time set for: ",0,0);
-	display_time_center(hours, minutes, seconds);
-}
-
-int get_string_length(char *s) {
-   int c = 0;
-   while(s[c] != '\0')
-      c++;
-   return c;
-}
-
-void center_text(char* str){
-	clear_line(2);
-	int lengthstr = get_string_length(str);
-	int ypos = 16;
-
-	/* Calculate the (start) x-position based on the length of the string */
-	int xpos = 64 - ((lengthstr*6)/2);
-
-	/* Write string to lcd */
-	put_string_pos(str, xpos, ypos);
-}
-
-void display_music(char* str){
-	clear_lcd();
-	put_string_pos("Current alarm tone: ",0,0);
-	center_text(str);
-}
-
-void display_menu(char* str, int hours, int minutes, int seconds){
-	clear_lcd();
-	/* Display current time in the left top corner */
-	display_time_lefttop(hours, minutes, seconds);
-
-	/* Display the current menu item in the middle */
-	center_text(str);
-}
-
-void center_date(int d, int m, int y){
-	clear_line(2);
-
-	if(d <= 9){
-		put_int(0,30,16);
-		put_int(d,36,16);
-		put_string(" ");
-	}
-	else {
-		put_int(d,30,16);
-		put_string(" ");
-	}
-
-	put_string_pos(getMonthName(m),48,16);
-	put_string(" ");
-
-	put_int(y,72,16);
 }
 
 char* getMonthName(int m){
@@ -353,10 +219,141 @@ char* getMonthName(int m){
 	return str;
 }
 
-void display_date(int d, int m, int y){
+int get_string_length(char *s) {
+   int c = 0;
+   while(s[c] != '\0')
+      c++;
+   return c;
+}
+
+void center_text(char* str){
+	clear_line(2);
+	int lengthstr = get_string_length(str);
+	int ypos = 16;
+
+	/* Calculate the (start) x-position based on the length of the string */
+	int xpos = 64 - ((lengthstr*6)/2);
+
+	/* Write string to lcd */
+	put_string_pos(str, xpos, ypos);
+}
+
+void center_date(int d, int m, int y){
+	clear_line(2);
+
+	if(d <= 9){
+		put_int(0,30,16);
+		put_int(d,36,16);
+		put_string(" ");
+	}
+	else {
+		put_int(d,30,16);
+		put_string(" ");
+	}
+
+	put_string_pos(getMonthName(m),48,16);
+	put_string(" ");
+
+	put_int(y,72,16);
+}
+
+void clear(void){
 	clear_lcd();
-	put_string_pos("New date set for: ",0,0);
-	center_date(d, m, y);
+}
+
+void display_time_lefttop(int hours, int minutes, int seconds){
+	clear_line(0);
+	if(hours < 10 ){
+		put_int(0,0,0);
+		put_int(hours,8,0);
+	}
+	else {
+		put_int(hours,0,0);
+	}
+
+	put_string(" : ");
+
+	if(minutes < 10){
+		put_int(0,20,0);
+		put_int(minutes,28,0);
+	}
+	else {
+		put_int(minutes,20,0);
+	}
+
+	put_string(" : ");
+
+	if(seconds < 10){
+		put_int(0,40,0);
+		put_int(seconds,48,0);
+	}
+	else {
+		put_int(seconds,40,0);
+	}
+}
+
+void display_time_center(int hours, int minutes, int seconds){
+	clear_line(2);
+	if(hours < 10 ){
+		put_int(0,39,16);
+		put_int(hours,47,16);
+	}
+	else {
+		put_int(hours,39,16);
+	}
+
+	put_string(" : ");
+
+	if(minutes < 10){
+		put_int(0,59,16);
+		put_int(minutes,67,16);
+	}
+	else {
+		put_int(minutes,59,16);
+	}
+
+	put_string(" : ");
+
+	if(seconds < 10){
+		put_int(0,79,16);
+		put_int(seconds,86,16);
+	}
+	else {
+		put_int(seconds,79,16);
+	}
+}
+
+void display_time_current(int hours, int minutes, int seconds){
+	clear_lcd();
+	put_string_pos("Current time: ",0,0);
+	display_time_center(hours, minutes, seconds);
+}
+
+void display_time_alarm(int hours, int minutes, int seconds){
+	clear_lcd();
+	put_string_pos("Alarm time set for: ",0,0);
+	display_time_center(hours, minutes, seconds);
+}
+
+void display_time_time(int hours, int minutes,int seconds){
+	clear_lcd();
+	put_string_pos("New time set for: ",0,0);
+	display_time_center(hours, minutes, seconds);
+}
+
+void display_music(char* str){
+	clear_lcd();
+	put_string_pos("Current alarm tone: ",0,0);
+	center_text(str);
+}
+
+void display_menu(char* str, int hours, int minutes, int seconds){
+	clear_lcd();
+	/* Display current time in the left top corner */
+	display_time_lefttop(hours, minutes, seconds);
+
+	/* Display the current menu item in the middle */
+	center_text(str);
 }
 
 void display_alarm_onOff(int onOff){
@@ -367,6 +364,24 @@ void display_alarm_onOff(int onOff){
 	}
 }
 
-void clear(void){
-	clear_lcd();
+void display_date_leftbottom(char* weekday, int day, char* month, int year){
+	clear_line(3);
+	put_string_pos(weekday,0,24);
+	if(day <= 9){
+		put_int(0,24,24);
+		put_int(day,30,24);
+	}
+	else {
+		put_int(day,24,24);
+	}
+	put_string_pos(month,40,24);
+	put_int(year,62,24);
+
 }
+
+void display_date(int d, int m, int y){
+	clear_lcd();
+	put_string_pos("New date set for: ",0,0);
+	center_date(d, m, y);
+}
+
