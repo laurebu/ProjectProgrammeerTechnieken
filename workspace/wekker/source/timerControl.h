@@ -33,5 +33,7 @@ int getTimeBit(void);
 void setTimeBit(int t);
 void checkSummerTime(void);
 void checkWinterTime(void);
-
+int calc_days(int d, int m, int y);
+int calc_months(int d, int m, int y);
+int calc_years(int d, int m, int y);
 #endif

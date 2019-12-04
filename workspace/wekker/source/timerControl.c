@@ -16,6 +16,11 @@ int hours = 0;
 int days = 0;
 int year = 2019;
 
+const int startDays = 0;
+const int startMonth = 0;
+const int startYear = 1;
+const enum Day startWeekday = Sat;
+
 int dayPassed=0;
 int firstHourChange=1;
 
@@ -299,65 +304,114 @@ void setTimeBit(int t){
 
 //TODO: split in functions
 void set_date(int d, int m, int y){
-	int daysInbetween = 0;
+	// Calculate days in between current day and new date
+	// No change between dates
+	if((year == y) && (month == m) && (days == d)){
+		day = day;
+	}
+	// Change
+	else {
+		// Calculate how many days are between the current date and the date to set
+		int daysInbetweenDays = calc_days(d, m, y);
+		int daysInbetweenMonths = calc_months(d, m, y);
+		int daysInbetweenYears = calc_years(d,m,y);
+		int daysInbetween = daysInbetweenDays + daysInbetweenMonths + daysInbetweenYears;
 
-	//Calculate how many full years (in days) are in between the current date and the date to set
-	if(year < y){
-		// Forwards in time
-		for(int i = year; i < y; i ++){
-			// Make sure the last year is a full year and not just a couple of months
-			if( (((y-year) == 1)&& ((month+1) < m)) || ((y-year) == 1 && ((month+1) == m) && (d > days)) ){
-				if (leapyear(i) == 1){
-				// Leap year -> year counts 366 days
-					daysInbetween += 366;
-				}
-				else {
-					daysInbetween += 365;
-				}
-			}
-			// Multiple years to pass still, add days to the counter
-			else {
-				if (leapyear(i) == 1){
-				// Leap year -> year counts 366 days
-					daysInbetween += 366;
-				}
-				else {
-					daysInbetween += 365;
-				}
-			}
-		}
+		// Adjust the day of the week
+		day = (startWeekday + daysInbetween )%7;
+	}
+
+	// Set the day of the month, the month and the year
+	days = d - 1;
+	month = m - 1;
+	year = y;
+}
+
+int calc_days(int d, int m, int y){
+		int daysInbetween = 0;
+
+	// Calculate how many days there are left
+	if(m == (startMonth + 1)){
+		// Current month and month to set are the same
+		daysInbetween += (d - startDays + 1);
 	}
 	else {
-		// Backwards in time
-		for(int i = year; i < y; i ++){
-			// Make sure the last year is a full year and not a couple of months
-			if( (y-year) == 1 && month+1 < m){
-				if (leapyear(i) == 1){
-				// Leap year -> year counts 366 days
-					daysInbetween += 366;
+		// Current month and month to set are different
+		switch(startMonth + 1){	// Current month till end date
+			// 31 days in the month
+			case 1:
+			case 3:
+			case 5:
+			case 7:
+			case 8:
+			case 10:
+			case 12:
+				daysInbetween += ((31 - startDays) + 1);
+				break;
+			// 30 days in month
+			case 4:
+			case 6:
+			case 9:
+			case 11:
+				daysInbetween += ((30 - startDays) + 1);
+				break;
+			// 28 or 29 days in a month
+			case 2:
+				if(leapyear(startYear)){
+					daysInbetween += ((29 - startDays) + 1);
 				}
 				else {
-					daysInbetween += 365;
+					daysInbetween += ((28 - startDays) + 1);
 				}
-			}
-			// Multiple years to pass still, add days to the counter
-			else if ( (y- year) >= 1 ) {
-				if (leapyear(i) == 1){
-				// Leap year -> year counts 366 days
-					daysInbetween += 366;
-				}
-				else {
-					daysInbetween += 365;
-				}
+				break;
+		}
+		// Month to set from beginning to date now
+		daysInbetween += (d);
+	}
+	return daysInbetween;
+}
+
+// Calculate how many full months (in days) are in the last not-complete year and add
+// Notice: if (actual_month == month) => there isn't a full month in between the dates
+int calc_months(int d, int m, int y){
+	int daysInbetween = 0;
+	int actual_month = startMonth + 1;
+	// The month to set is bigger than the current month (f.ex. april(now) -> August(to set))
+	if( actual_month < m) {
+		for(int i = (actual_month + 1); i<=(m-1) ; i++){
+			switch(i){
+				// 31 days in the month
+				case 1:
+				case 3:
+				case 5:
+				case 7:
+				case 8:
+				case 10:
+				case 12:
+					daysInbetween += 31;
+					break;
+				// 30 days in a month
+				case 4:
+				case 6:
+				case 9:
+				case 11:
+					daysInbetween += 30;
+					break;
+				// 28-29 days in month
+				case 2:
+					if(leapyear(y)){
+						// Leapyear -> february counts 29 days
+						daysInbetween += 29;
+					}
+					else {
+						daysInbetween += 28;
+					}
+					break;
 			}
 		}
 	}
-
-	// Calculate how many full months (in days) are in the last not-complete year and add
-	// Notice: if (actual_month == month) => there isn't a full month in between the dates
-	int actual_month = month + 1;
-	// The month to set is smaller than the current month (f.ex. april(now) -> february(to set))
-	if( actual_month < m){
+	else if (actual_month > m ){
+		// The month to set is smaller than the current month (f.ex. april(now) -> january(to set))
 		// Step 1: Go from current month (+1) till December and add
 		for(int i = (actual_month + 1); i < 13 ; i++){
 			switch(i){
@@ -391,7 +445,7 @@ void set_date(int d, int m, int y){
 			}
 		}
 		// Step 2: Go January to the month to set (-1) and add days
-		for(int i = 1 ; i < (m-1) ; i++){
+		for(int i = 1 ; i <= (m-1) ; i++){
 			switch(i){
 				// 31 days in the month
 				case 1:
@@ -423,78 +477,64 @@ void set_date(int d, int m, int y){
 			}
 		}
 	}
-	else if( actual_month > m) {
-		for(int i = (actual_month + 1); i<(m-1) ; i++){
-			switch(i){
-				// 31 days in the month
-				case 1:
-				case 3:
-				case 5:
-				case 7:
-				case 8:
-				case 10:
-				case 12:
-					daysInbetween += 31;
-					break;
-				// 30 days in a month
-				case 4:
-				case 6:
-				case 9:
-				case 11:
-					daysInbetween += 30;
-					break;
-				// 28-29 days in month
-				case 2:
-					if(leapyear(y)){
-						// Leapyear -> february counts 29 days
-						daysInbetween += 29;
+	return daysInbetween;
+}
+
+//Calculate how many full years (in days) are in between the current date and the date to set
+int calc_years(int d, int m, int y){
+	int daysInbetween = 0;
+	for(int i = (startYear + 1) ; i <= y; i ++){
+		// Make sure the last year is a full year and not just a couple of months
+		if(i == y){
+			if(((startMonth + 1) < m) || (((startMonth + 1) == m) && (startDays <= d))){
+				// Check in which year february falls
+				if(startMonth <  2){
+					// February falls in previous years
+					if (leapyear(i-1) == 1){
+					// Leap year -> year counts 366 days
+						daysInbetween += 366;
 					}
 					else {
-						daysInbetween += 28;
+						daysInbetween += 365;
 					}
-					break;
+				}
+				else {
+					// February in current year
+					if (leapyear(i) == 1){
+					// Leap year -> year counts 366 days
+						daysInbetween += 366;
+					}
+					else {
+						daysInbetween += 365;
+					}
+				}
+			}
+		}
+		// Multiple years still to pass
+		else if (i < y)
+		{
+			// Check in which year february falls
+			if(startMonth <  2){
+				// February falls in this year
+				if (leapyear(i-1) == 1){
+					// Leap year -> year counts 366 days
+					daysInbetween += 366;
+				}
+				else {
+					daysInbetween += 365;
+				}
+			}
+			else {
+				// February in current year
+				if (leapyear(i) == 1){
+				// Leap year -> year counts 366 days
+					daysInbetween += 366;
+				}
+				else {
+					daysInbetween += 365;
+				}
 			}
 		}
 	}
-
-	// Calculate how many days (in days) there are still left in the current month and add
-	switch(month+1){
-		// 31 days in the month
-		case 1:
-		case 3:
-		case 5:
-		case 7:
-		case 8:
-		case 10:
-		case 12:
-			daysInbetween += (31- (days + 1));
-			break;
-		// 30 days in a month
-		case 4:
-		case 6:
-		case 9:
-		case 11:
-			daysInbetween += (30 - (days + 1));
-			break;
-		// 28-29 days in month
-		case 2:
-			if(leapyear(y)){
-				// Leapyear -> february counts 29 days
-				daysInbetween += (29 - (days + 1) );
-			}
-			else {
-				daysInbetween += (28 - (days + 1));
-			}
-			break;
-	}
-	// Calculate how many days (in days) there are left in the month to set and add
-	daysInbetween += d;
-
-	// Adjust the day of the week
-	day = (day + daysInbetween)%7;
-
-	// Set the day of the month, the month and the year
-	days = d-1;  //start from 0
-	month = m-1; //start from 0
-	year = y;
+	return daysInbetween;
 }
