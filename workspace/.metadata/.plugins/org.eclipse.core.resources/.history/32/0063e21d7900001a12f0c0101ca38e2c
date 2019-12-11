@@ -1,8 +1,0 @@
-/*
- * @author: Laure Buysse
- * @file: lcdControl.c
- */
-
-#ifndef LCDCONTROL_H
-#define LCDCONTROL_H
-#endif //LCDCONTROL_H

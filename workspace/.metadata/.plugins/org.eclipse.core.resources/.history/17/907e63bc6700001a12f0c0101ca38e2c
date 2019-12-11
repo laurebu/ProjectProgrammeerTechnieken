@@ -1,7 +1,0 @@
-/*
- * @author: Laure Buysse
- * @file: lcdDriver.h
- */
-
-//files to include
-#include "lcdDriver.h"

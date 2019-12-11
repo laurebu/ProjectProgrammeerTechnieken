@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;wekker/source/buttonDriver.C&apos; to &apos;buttonDriver.c&apos;" description="Rename resource &apos;buttonDriver.C&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="source/buttonDriver.C" name="buttonDriver.c" stamp="1571837437111" updateReferences="true"/>
-</session>

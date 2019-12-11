@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;wekker/source/inputcontrol&apos; to &apos;inputcontrol.h&apos;" description="Rename resource &apos;inputcontrol&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="source/inputcontrol" name="inputcontrol.h" stamp="1571226763491" updateReferences="true"/>
-</session>

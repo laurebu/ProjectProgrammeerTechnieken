@@ -1,6 +1,0 @@
-21:21:53 **** Incremental Build of configuration Debug for project test ****
-make -r -j8 all 
-make: Nothing to be done for 'all'.
-
-21:21:53 Build Finished. 0 errors, 0 warnings. (took 143ms)
-

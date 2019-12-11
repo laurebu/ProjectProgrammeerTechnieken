@@ -1,3 +1,0 @@
-18:39:47 **** Incremental Build of configuration Debug for project wekker ****
-make -r -j8 all 
-make: Nothing to be done for 'all'.

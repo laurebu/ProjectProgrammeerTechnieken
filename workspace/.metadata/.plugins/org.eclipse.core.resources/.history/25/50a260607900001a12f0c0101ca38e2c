@@ -1,8 +1,0 @@
-/*
- * @author: Laure Buysse
- * @file: lcdControl.c
- */
-
-//files to include
-#include <stdio.h>
-#include "lcdControl.h"
